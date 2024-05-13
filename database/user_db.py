@@ -6,8 +6,7 @@ from datetime import datetime, timedelta
 def add_new_user(user_id, username):
     check_ = check_user_status(user_id)
     if not check_:
-        paid_by = datetime.now() + timedelta(days=2)
-        cursor.execute("INSERT INTO User(id, name, paid_by) VALUES(?,?,?)", (user_id, username, paid_by))
+        cursor.execute("INSERT INTO User(id, name, subscribed) VALUES(?,?,?)", (user_id, username, False))
         database.commit()
         add_in_feedback_users(user_id)
 
