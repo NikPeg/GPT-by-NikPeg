@@ -2,7 +2,6 @@ import openai
 from tenacity import retry, stop_after_attempt, wait_fixed
 from typing_extensions import override
 from openai import AssistantEventHandler
-from . import prompts
 from .models import *
 from config import ADMIN_ID
 from openai import OpenAI, AsyncOpenAI
@@ -13,7 +12,7 @@ class GPTProxy:
     def __init__(self, token, model="gpt-3.5-turbo", bot=None):
         self.client = openai.OpenAI(api_key=token)
         self.model = model
-        self.assistant_id = self.create_assistant("NikPeg bot", prompts.BIG_KPT, [])
+        self.assistant_id = self.create_assistant("NikPeg bot")
         # self.assistant_id = "asst_V5QY8jxpRjP1CD8mIix7SeVo"
         self.bot = bot
         self.aclient = AsyncOpenAI(api_key=token)
@@ -26,7 +25,8 @@ class GPTProxy:
         # file_id = "file-w5QGfWSaEQdwqu2cuWVr7mTm"
         return result.id
 
-    def create_assistant(self, name, instructions, file_ids):
+    def create_assistant(self, name, instructions="", file_ids=None):
+        file_ids = file_ids or []
         assistant = self.client.beta.assistants.create(
             model=self.model,
             name=name,
