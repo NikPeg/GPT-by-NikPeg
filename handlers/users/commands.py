@@ -12,6 +12,7 @@ import buttons
 import messages
 import payments
 from database.payment_db import check_subscribed, subscribe
+from database.sentence_db import random_sentence
 from database.session_db import create_new_session
 from database.user_db import add_new_user
 from handlers.admin.commands import unsubscribe_message_handler
@@ -31,7 +32,7 @@ class UserState(StatesGroup):
 async def start_command_handler(message: types.Message):
     add_new_user(message.chat.id, message.chat.username)
     await bot.send_message(message.chat.id, START, reply_markup=start_markup())
-    await bot.send_message(message.chat.id, PROMPT)
+    await bot.send_message(message.chat.id, PROMPT.format(random_sentence()))
     await bot.send_message(
         ADMIN_ID,
         messages.BUTTON_PRESSED.format(message.chat.id, message.chat.username, message.text),
@@ -114,7 +115,7 @@ async def paid_handler(message: types.Message):
 @dp.message_handler(commands=['help'], state="*")
 async def help_message_handler(message: types.Message):
     await bot.send_message(message.chat.id, HELP.format(config.PRICE))
-    await bot.send_message(message.chat.id, PROMPT)
+    await bot.send_message(message.chat.id, PROMPT.format(random_sentence()))
     await bot.send_message(
         ADMIN_ID,
         messages.BUTTON_PRESSED.format(message.chat.id, message.chat.username, message.text),
@@ -123,7 +124,7 @@ async def help_message_handler(message: types.Message):
 
 @dp.message_handler(commands=['new'], state="*")
 async def help_message_handler(message: types.Message):
-    await bot.send_message(message.chat.id, NEW_PROMPT)
+    await bot.send_message(message.chat.id, NEW_PROMPT.format(random_sentence()))
     create_new_session(message.chat.id)
     await bot.send_message(
         ADMIN_ID,

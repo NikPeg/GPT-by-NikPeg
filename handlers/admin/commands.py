@@ -6,7 +6,7 @@ from config import ADMIN_ID
 
 import messages
 from database.payment_db import unsubscribe
-from database.sentence_db import add_prompt
+from database.sentence_db import add_sentence
 from database.user_db import get_all_users
 from handlers.common import create_user_req
 from loader import dp, bot, client
@@ -52,7 +52,7 @@ async def post_message_handler(message: types.Message):
         return
     prompt_text = message.text[len("/add "):]
     await bot.send_message(ADMIN_ID, messages.ADD_PROMPT_MESSAGE.format(prompt_text))
-    add_prompt(prompt_text)
+    add_sentence(prompt_text)
 
 
 async def unsubscribe_message_handler(message: types.Message):
