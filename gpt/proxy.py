@@ -3,6 +3,7 @@ from tenacity import retry, stop_after_attempt, wait_fixed
 from .models import *
 from openai import AsyncOpenAI
 import time
+from prompts import PROMPT
 
 
 try:
@@ -17,7 +18,7 @@ class GPTProxy:
     def __init__(self, token, model="gpt-3.5-turbo", bot=None):
         self.client = openai.OpenAI(api_key=token)
         self.model = model
-        self.assistant_id = ASSISTANT_ID or self.create_assistant("NikPeg bot")
+        self.assistant_id = ASSISTANT_ID or self.create_assistant("NikPeg bot", PROMPT)
         self.bot = bot
         self.aclient = AsyncOpenAI(api_key=token)
 
