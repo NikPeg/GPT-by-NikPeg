@@ -20,7 +20,8 @@
 `ADMIN_ID = your-telegram-id`  
 `SOS_URL = "your-telegram-url"`  
 `DB_FILENAME = "bot.sqlite"`  
-`MODEL = "your-favourite-model"`
+`MODEL = "your-favourite-model"`  
+`ASSISTANT_ID = "your-gpt-assistant-id"` (optional)
 
 
 Запуститe бота:  
