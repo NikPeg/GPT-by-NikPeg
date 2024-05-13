@@ -41,7 +41,7 @@ async def start_command_handler(message: types.Message):
 
 @dp.callback_query_handler(text='info', state="*")
 async def info_handler(call: types.CallbackQuery):
-    await call.message.edit_text(HELP, reply_markup=return_markup())
+    await call.message.edit_text(HELP.format(config.PRICE), reply_markup=return_markup())
     await bot.send_message(
         ADMIN_ID,
         messages.BUTTON_PRESSED.format(call.message.chat.id, call.message.chat.username, buttons.ABOUT.text),
@@ -113,7 +113,7 @@ async def paid_handler(message: types.Message):
 
 @dp.message_handler(commands=['help'], state="*")
 async def help_message_handler(message: types.Message):
-    await bot.send_message(message.chat.id, HELP)
+    await bot.send_message(message.chat.id, HELP.format(config.PRICE))
     await bot.send_message(message.chat.id, PROMPT)
     await bot.send_message(
         ADMIN_ID,
