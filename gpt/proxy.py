@@ -3,7 +3,7 @@ from tenacity import retry, stop_after_attempt, wait_fixed
 from .models import *
 from openai import AsyncOpenAI
 import time
-from prompts import PROMPT
+from .prompts import PROMPT
 
 
 try:
