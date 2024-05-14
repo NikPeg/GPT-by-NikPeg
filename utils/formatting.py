@@ -13,4 +13,9 @@ def markdown_to_html(s):
     s = re.sub(r"\n### (.*?)\n", r"\n<b>\1</b>\n", s)
     s = re.sub(r"\n### (.*?)\n", r"\n<b>\1</b>\n", s)
     s = re.sub(r"\n### (.*?)$", r"\n<b>\1</b>", s)
+
+    # Теперь оставшиеся символы
+    s = re.sub(r"_", "\_", s)
+    s = re.sub(r"@", "\@", s)
+    s = re.sub(r"&", "\&", s)
     return s
