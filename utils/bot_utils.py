@@ -11,7 +11,7 @@ async def send_big_message(bot, user_id, text):
     for i in range(0, len(text), MAX_MESSAGE_LENGTH):
         text_part = text[i:i + MAX_MESSAGE_LENGTH]
         print(text_part)
-        for parse_mode in [ParseMode.MARKDOWN_V2, ParseMode.MARKDOWN, ParseMode.HTML]:
+        for parse_mode in [ParseMode.MARKDOWN, ParseMode.HTML]:
             try:
                 await bot.send_message(user_id, text_part, parse_mode=parse_mode)
                 break
