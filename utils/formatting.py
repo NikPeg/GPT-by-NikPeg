@@ -29,6 +29,7 @@ def screen_markdownv2_symbols(s):
     s = re.sub(r'\]', '\]', s)
     s = re.sub(r'\\', '\\\\', s)
     s = re.sub(r'\+', '\+', s)
+    re.sub(r'(?<!_)_(?!_)', r'\_', s)
     return s
 
 
