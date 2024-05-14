@@ -29,14 +29,11 @@ class GPTProxy:
         )
         return result.id
 
-    def create_assistant(self, name, instructions="", file_ids=None):
-        file_ids = file_ids or []
+    def create_assistant(self, name, instructions=""):
         assistant = self.client.beta.assistants.create(
             model=self.model,
             name=name,
-            tools=[{"type": "retrieval"}],
             instructions=instructions,
-            file_ids=file_ids,
         )
         print("assistant_id:", assistant.id)
         return assistant.id
