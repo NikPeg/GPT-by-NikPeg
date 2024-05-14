@@ -11,7 +11,7 @@ def feedback_markup():
 
 def start_markup():
     markup = InlineKeyboardMarkup(resize_keyboard=True)
-    markup.add(buttons.PROMO)
+    markup.insert(buttons.PROMO)
     markup.add(buttons.ABOUT, buttons.SOS)
     return markup
 
