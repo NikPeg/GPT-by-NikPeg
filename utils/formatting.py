@@ -13,7 +13,6 @@ def screen_symbols(s):
 
 
 def screen_markdownv2_symbols(s):
-    s = re.sub(r'\}', '\}', s)
     s = re.sub(r'\@', '\@', s)
     s = re.sub(r'\.', '\.', s)
     s = re.sub(r'\!', '\!', s)
