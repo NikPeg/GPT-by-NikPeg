@@ -33,15 +33,16 @@ async def create_user_req(user_id, user_name, request_text):
     await gpt.add_message(thread_id, request_text)
     await typing()
     bot_answer = await gpt.get_answer(thread_id, typing)
-    try:
-        await send_big_message(bot, user_id, markdown_to_html(bot_answer), parse_mode=ParseMode.HTML)
-    except Exception as e:
-        await send_big_message(bot, user_id, bot_answer)
-        await send_big_message(
-            bot,
-            ADMIN_ID,
-            messages.PARSING_ERROR.format(e),
-        )
+    for parse_mode in [ParseMode.HTML, ParseMode.MARKDOWN_V2]:
+        try:
+            await send_big_message(bot, user_id, markdown_to_html(bot_answer), parse_mode=parse_mode)
+            break
+        except Exception as e:
+            await send_big_message(
+                bot,
+                ADMIN_ID,
+                messages.PARSING_ERROR.format(e),
+            )
     await send_big_message(
         bot,
         ADMIN_ID,
