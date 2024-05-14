@@ -2,8 +2,12 @@ import re
 
 
 def screen_symbols(s):
-    for symbol in "@#$%&":
-        s = re.sub(fr"{symbol}", f"\{symbol}", s)
+    s = re.sub(r'\}', r'\\}', s)
+    s = re.sub(r'\@', r'\\@', s)
+    s = re.sub(r'\#', r'\\#', s)
+    s = re.sub(r'\$', r'\\$', s)
+    s = re.sub(r'\%', r'\\%', s)
+    s = re.sub(r'\&', r'\\&', s)
     s = re.sub(r"\*", "\*", s)
     return s
 
