@@ -7,3 +7,4 @@ ABOUT = InlineKeyboardButton(text='🤔Узнать о боте', callback_data=
 SOS = InlineKeyboardButton(text='🥺Поддержка', url=config.SOS_URL)
 BACK = InlineKeyboardButton(text='👈Назад', callback_data='return')
 PAYMENT = InlineKeyboardButton(text='🫰Оформить подписку', callback_data='payment')
+PROMO = InlineKeyboardButton(text='🤙Ввести промокод', callback_data='promo')

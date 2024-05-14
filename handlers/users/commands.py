@@ -12,6 +12,7 @@ import buttons
 import messages
 import payments
 from database.payment_db import check_subscribed, subscribe
+from database.promo_db import check_promo
 from database.sentence_db import random_sentence
 from database.session_db import create_new_session
 from database.user_db import add_new_user
@@ -26,6 +27,7 @@ class UserState(StatesGroup):
     gpt_request = State()
     feedback = State()
     payment = State()
+    promo = State()
 
 
 @dp.message_handler(commands=['start'], state="*")
@@ -130,6 +132,27 @@ async def help_message_handler(message: types.Message):
         ADMIN_ID,
         messages.BUTTON_PRESSED.format(message.chat.id, message.chat.username, message.text),
     )
+    await UserState.gpt_request.set()
+
+@dp.message_handler(commands=['new'], state="*")
+async def promo_message_handler(message: types.Message):
+    await bot.send_message(message.chat.id, messages.PROMO_PROMPT)
+    await bot.send_message(
+        ADMIN_ID,
+        messages.BUTTON_PRESSED.format(message.chat.id, message.chat.username, message.text),
+        reply_markup=return_markup(),
+    )
+    await UserState.promo.set()
+
+
+@dp.message_handler(state=UserState.promo)
+async def promo_message_handler(message: types.Message):
+    promo = message.text
+    sale = check_promo(promo)
+    if sale:
+        await bot.send_message(message.chat.id, messages.REAL_PROMO.format(sale), reply_markup=return_markup())
+    else:
+        await bot.send_message(message.chat.id, messages.WRONG_PROMO, reply_markup=return_markup())
     await UserState.gpt_request.set()
 
 
