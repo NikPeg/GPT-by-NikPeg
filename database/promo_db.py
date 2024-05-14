@@ -13,7 +13,7 @@ def check_promo(promo):
 
 def add_promo(sale, count, name):
     cursor.execute(
-        "INSERT INTO Promo(sale, count, name) VALUES(?,?,?,?)",
+        "INSERT INTO Promo(sale, count, name) VALUES(?,?,?)",
         (sale, count, name),
     )
     database.commit()
