@@ -21,6 +21,7 @@
 `SOS_URL = "your-telegram-url"`  
 `DB_FILENAME = "bot.sqlite"`  
 `MODEL = "your-favourite-model"`  
+`INSTANCE_NAME = "your-server-name"`  
 `ASSISTANT_ID = "your-gpt-assistant-id"` (optional)
 
 
