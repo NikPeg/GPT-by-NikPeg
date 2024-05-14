@@ -57,16 +57,18 @@ async def post_message_handler(message: types.Message):
 
 
 @dp.message_handler(commands=['promo'], state="*")
-async def post_message_handler(message: types.Message):
+async def promo_message_handler(message: types.Message):
     if message.chat.id != ADMIN_ID:
         return
-    await bot.send_message(ADMIN_ID, messages.ADD_PROMO_MESSAGE)
-    split_message = message.text.split()
-    sale = int(split_message[1])
-    count = int(split_message[2])
-    promo = " ".join(split_message[3:])
-    add_promo(sale, count, promo)
-    await bot.send_message(ADMIN_ID, messages.ADD_PROMPT_MESSAGE.format(prompt_text))
+    try:
+        split_message = message.text.split()
+        sale = int(split_message[1])
+        count = int(split_message[2])
+        promo = " ".join(split_message[3:])
+        add_promo(sale, count, promo)
+        await bot.send_message(ADMIN_ID, messages.ADDED_PROMO.format(promo))
+    except Exception:
+        await bot.send_message(ADMIN_ID, messages.ADD_PROMO_MESSAGE)
 
 
 async def unsubscribe_message_handler(message: types.Message):
