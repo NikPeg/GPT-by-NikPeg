@@ -136,7 +136,7 @@ async def help_message_handler(message: types.Message):
 
 @dp.callback_query_handler(text='promo', state="*")
 async def promo_message_handler(call: types.CallbackQuery):
-    await bot.send_message(call.message.chat.id, messages.PROMO_PROMPT, reply_markup=return_markup())
+    await call.message.edit_text(messages.PROMO_PROMPT, reply_markup=return_markup())
     await bot.send_message(
         ADMIN_ID,
         messages.BUTTON_PRESSED.format(call.message.chat.id, call.message.chat.username, buttons.PROMO.text),
