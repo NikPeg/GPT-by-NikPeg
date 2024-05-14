@@ -1,8 +1,8 @@
 from . import cursor
 
 
-def check_promo(user_id):
-    cursor.execute("SELECT sale FROM Promo WHERE id=?", (user_id,))
+def check_promo(promo):
+    cursor.execute("SELECT sale FROM Promo WHERE name=?", (promo,))
     sale = cursor.fetchone()
     if sale is None:
         return 0
