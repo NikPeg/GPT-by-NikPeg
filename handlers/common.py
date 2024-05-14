@@ -26,7 +26,7 @@ async def create_user_req(user_id, user_name, request_text):
     await gpt.add_message(thread_id, request_text)
     await typing()
     bot_answer = await gpt.get_answer(thread_id, typing)
-    await send_big_message(bot, user_id, markdown_to_html(bot_answer))
+    await send_big_message(bot, user_id, bot_answer)
     await send_big_message(
         bot,
         ADMIN_ID,
