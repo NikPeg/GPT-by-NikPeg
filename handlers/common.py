@@ -21,12 +21,13 @@ async def create_user_req(user_id, user_name, request_text):
             bot,
             ADMIN_ID,
             messages.MESSAGE_SENT.format(user_id, user_name, request_text),
+            parse_mode=None,
         )
     except Exception as e:
         await send_big_message(
             bot,
             ADMIN_ID,
-            messages.PARSING_ERROR.format(e),
+            messages.PARSING_ERROR.format(e) + "line 30",
         )
     thread_id = get_thread_id(user_id)
     await typing()
@@ -41,7 +42,7 @@ async def create_user_req(user_id, user_name, request_text):
             await send_big_message(
                 bot,
                 ADMIN_ID,
-                messages.PARSING_ERROR.format(e),
+                messages.PARSING_ERROR.format(e) + "line 45",
             )
     await send_big_message(
         bot,
