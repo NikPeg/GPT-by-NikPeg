@@ -1,4 +1,4 @@
-from . import cursor
+from . import cursor, database
 
 
 def check_promo(promo):
@@ -7,3 +7,11 @@ def check_promo(promo):
     if sale is None:
         return 0
     return int(sale[0])
+
+
+def add_promo(sale, count, name):
+    cursor.execute(
+        "INSERT INTO Promo(sale, count, name) VALUES(?,?,?,?)",
+        (sale, count, name),
+    )
+    database.commit()
