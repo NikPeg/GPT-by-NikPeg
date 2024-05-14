@@ -6,6 +6,7 @@ from config import ADMIN_ID
 
 import messages
 from database.payment_db import unsubscribe
+from database.promo_db import add_promo
 from database.sentence_db import add_sentence
 from database.user_db import get_all_users
 from handlers.common import create_user_req
