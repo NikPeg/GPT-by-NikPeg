@@ -31,4 +31,4 @@ async def try_polling():
 
 
 if __name__ == '__main__':
-    asyncio.create_task(try_polling())
+    asyncio.run(try_polling())
