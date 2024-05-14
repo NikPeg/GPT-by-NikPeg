@@ -27,4 +27,4 @@ async def send_big_message(bot, user_id, text):
                 print(e)
                 err = e
         else:
-            bot.send_message(ADMIN_ID, messages.PARSING_ERROR.format(err))
+            await bot.send_message(ADMIN_ID, messages.PARSING_ERROR.format(err))
