@@ -10,9 +10,7 @@ async def send_big_message(bot, user_id, text):
     print(text)
     for i in range(0, len(text), MAX_MESSAGE_LENGTH):
         text_part = text[i:i + MAX_MESSAGE_LENGTH]
-        print(text_part)
         screened = screen_markdownv2_symbols(text_part)
-        print(screened)
         for parse_mode in [ParseMode.MARKDOWN_V2, ParseMode.MARKDOWN, ParseMode.HTML]:
             try:
                 await bot.send_message(user_id, screened, parse_mode=parse_mode)
