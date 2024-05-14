@@ -6,7 +6,6 @@ from database.message_db import add_new_message
 from database.session_db import get_thread_id
 from loader import bot, gpt
 from utils.bot_utils import send_big_message
-from utils.formatting import markdown_to_html
 
 TYPING_ACTION = "typing"
 
