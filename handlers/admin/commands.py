@@ -67,8 +67,9 @@ async def promo_message_handler(message: types.Message):
         promo = " ".join(split_message[3:])
         add_promo(sale, count, promo)
         await bot.send_message(ADMIN_ID, messages.ADDED_PROMO.format(promo))
-    except Exception:
+    except Exception as e:
         await bot.send_message(ADMIN_ID, messages.ADD_PROMO_MESSAGE)
+        await bot.send_message(ADMIN_ID, e)
 
 
 async def unsubscribe_message_handler(message: types.Message):
