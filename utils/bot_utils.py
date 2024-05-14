@@ -12,7 +12,7 @@ async def send_big_message(bot, user_id, text):
         text_part = text[i:i + MAX_MESSAGE_LENGTH]
         print(text_part)
         try:
-            await bot.send_message(user_id, "**hello**", parse_mode="Markdown")
+            await bot.send_message(user_id, "*hello*", parse_mode=ParseMode.MARKDOWN)
             await bot.send_message(user_id, text_part, parse_mode="Markdown")
             break
         except Exception as e:
