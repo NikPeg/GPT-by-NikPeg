@@ -12,6 +12,18 @@ def screen_symbols(s):
     return s
 
 
+def screen_markdownv2_symbols(s):
+    s = re.sub(r'\}', r'\\}', s)
+    s = re.sub(r'\@', r'\\@', s)
+    s = re.sub(r'\.', r'\\.', s)
+    s = re.sub(r'\!', r'\\!', s)
+    s = re.sub(r'\#', r'\\#', s)
+    s = re.sub(r'\$', r'\\$', s)
+    s = re.sub(r'\%', r'\\%', s)
+    s = re.sub(r'\&', r'\\&', s)
+    return s
+
+
 def markdown_to_html(s):
     # Сначала заменяем **жирный** текст
     s = re.sub(r"\*\*(.*?)\*\*", r"<b>\1</b>", s)
