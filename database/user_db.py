@@ -23,3 +23,8 @@ def get_all_users():
     cursor.execute("SELECT id, name FROM User")
     all_users = cursor.fetchall()
     return all_users
+
+
+def update_sale(user_id, sale):
+    cursor.execute("UPDATE User SET sale=? WHERE id=?;", (sale, user_id))
+    database.commit()

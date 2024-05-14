@@ -15,7 +15,7 @@ from database.payment_db import check_subscribed, subscribe
 from database.promo_db import check_promo
 from database.sentence_db import random_sentence
 from database.session_db import create_new_session
-from database.user_db import add_new_user
+from database.user_db import add_new_user, update_sale
 from handlers.admin.commands import unsubscribe_message_handler
 from handlers.common import create_user_req
 from keyboards.keyboards import start_markup, return_markup, payment_markup
@@ -153,6 +153,7 @@ async def promo_message_handler(message: types.Message):
     )
     sale = check_promo(promo)
     if sale:
+        update_sale(message.chat.id, sale)
         await bot.send_message(message.chat.id, messages.REAL_PROMO.format(sale), reply_markup=return_markup())
     else:
         await bot.send_message(message.chat.id, messages.WRONG_PROMO, reply_markup=return_markup())
