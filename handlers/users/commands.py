@@ -135,11 +135,11 @@ async def help_message_handler(message: types.Message):
     await UserState.gpt_request.set()
 
 @dp.callback_query_handler(text='promo', state="*")
-async def promo_message_handler(message: types.Message):
-    await bot.send_message(message.chat.id, messages.PROMO_PROMPT)
+async def promo_message_handler(call: types.CallbackQuery):
+    await bot.send_message(call.message.chat.id, messages.PROMO_PROMPT)
     await bot.send_message(
         ADMIN_ID,
-        messages.BUTTON_PRESSED.format(message.chat.id, message.chat.username, message.text),
+        messages.BUTTON_PRESSED.format(call.message.chat.id, call.message.chat.username, call.message.text),
         reply_markup=return_markup(),
     )
     await UserState.promo.set()
