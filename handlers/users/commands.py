@@ -136,24 +136,27 @@ async def help_message_handler(message: types.Message):
 
 @dp.callback_query_handler(text='promo', state="*")
 async def promo_message_handler(call: types.CallbackQuery):
-    await bot.send_message(call.message.chat.id, messages.PROMO_PROMPT)
+    await bot.send_message(call.message.chat.id, messages.PROMO_PROMPT, reply_markup=return_markup())
     await bot.send_message(
         ADMIN_ID,
-        messages.BUTTON_PRESSED.format(call.message.chat.id, call.message.chat.username, call.message.text),
-        reply_markup=return_markup(),
+        messages.BUTTON_PRESSED.format(call.message.chat.id, call.message.chat.username, buttons.PROMO.text),
     )
     await UserState.promo.set()
 
 
-# @dp.message_handler(state=UserState.promo)
-# async def promo_message_handler(message: types.Message):
-#     promo = message.text
-#     sale = check_promo(promo)
-#     if sale:
-#         await bot.send_message(message.chat.id, messages.REAL_PROMO.format(sale), reply_markup=return_markup())
-#     else:
-#         await bot.send_message(message.chat.id, messages.WRONG_PROMO, reply_markup=return_markup())
-#     await UserState.gpt_request.set()
+@dp.message_handler(state=UserState.promo)
+async def promo_message_handler(message: types.Message):
+    promo = message.text
+    await bot.send_message(
+        ADMIN_ID,
+        messages.ENTERED_PROMO.format(message.chat.id, message.chat.username, promo),
+    )
+    sale = check_promo(promo)
+    if sale:
+        await bot.send_message(message.chat.id, messages.REAL_PROMO.format(sale), reply_markup=return_markup())
+    else:
+        await bot.send_message(message.chat.id, messages.WRONG_PROMO, reply_markup=return_markup())
+    await UserState.gpt_request.set()
 
 
 @dp.message_handler(state=UserState.gpt_request)
