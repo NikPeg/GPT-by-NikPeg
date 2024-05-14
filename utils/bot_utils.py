@@ -13,14 +13,14 @@ async def send_big_message(bot, user_id, text):
         try:
             await bot.send_message(user_id, markdown_to_html(text[i:i + MAX_MESSAGE_LENGTH]), parse_mode=ParseMode.HTML)
             continue
-        except Exception:
-            pass
+        except Exception as e:
+            await bot.send_message(ADMIN_ID, e)
         for parse_mode in [ParseMode.MARKDOWN_V2, ParseMode.MARKDOWN, ParseMode.HTML, None]:
             try:
                 await bot.send_message(user_id, text[i:i + MAX_MESSAGE_LENGTH], parse_mode=parse_mode)
                 break
             except Exception as e:
-                err = e
+                await bot.send_message(ADMIN_ID, e)
         else:
             await send_big_message(
                 bot,
