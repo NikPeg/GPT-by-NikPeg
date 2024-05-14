@@ -145,15 +145,15 @@ async def promo_message_handler(call: types.CallbackQuery):
     await UserState.promo.set()
 
 
-@dp.message_handler(state=UserState.promo)
-async def promo_message_handler(message: types.Message):
-    promo = message.text
-    sale = check_promo(promo)
-    if sale:
-        await bot.send_message(message.chat.id, messages.REAL_PROMO.format(sale), reply_markup=return_markup())
-    else:
-        await bot.send_message(message.chat.id, messages.WRONG_PROMO, reply_markup=return_markup())
-    await UserState.gpt_request.set()
+# @dp.message_handler(state=UserState.promo)
+# async def promo_message_handler(message: types.Message):
+#     promo = message.text
+#     sale = check_promo(promo)
+#     if sale:
+#         await bot.send_message(message.chat.id, messages.REAL_PROMO.format(sale), reply_markup=return_markup())
+#     else:
+#         await bot.send_message(message.chat.id, messages.WRONG_PROMO, reply_markup=return_markup())
+#     await UserState.gpt_request.set()
 
 
 @dp.message_handler(state=UserState.gpt_request)
