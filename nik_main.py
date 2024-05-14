@@ -22,11 +22,13 @@ TRY_POLLING_PERIOD = 60 * 5
 
 
 async def try_polling():
-    try:
-        executor.start_polling(dp, on_startup=on_startup, skip_updates=True)
-    except Exception as e:
-        print(e)
-    await asyncio.sleep(TRY_POLLING_PERIOD)
+    while True:
+        try:
+            executor.start_polling(dp, on_startup=on_startup, skip_updates=True)
+        except Exception as e:
+            print(e)
+        await asyncio.sleep(TRY_POLLING_PERIOD)
+
 
 if __name__ == '__main__':
-    executor.start_polling(dp, on_startup=on_startup, skip_updates=True)
+    asyncio.create_task(try_polling())
