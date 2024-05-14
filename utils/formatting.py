@@ -2,11 +2,9 @@ import re
 
 
 def screen_symbols(s):
-    s = re.sub(r"_", "\_", s)
-    s = re.sub(r"@", "\@", s)
-    s = re.sub(r"&", "\&", s)
-    s = re.sub(r"{", "\{", s)
-    s = re.sub(r"}", "\}", s)
+    for symbol in "@#$%&":
+        s = re.sub(fr"{symbol}", f"\{symbol}", s)
+    s = re.sub(r"\*", "\*", s)
     return s
 
 
@@ -22,6 +20,4 @@ def markdown_to_html(s):
     s = re.sub(r"\n### (.*?)\n", r"\n<b>\1</b>\n", s)
     s = re.sub(r"\n### (.*?)$", r"\n<b>\1</b>", s)
 
-    # Теперь оставшиеся символы
-    s = screen_symbols(s)
     return s

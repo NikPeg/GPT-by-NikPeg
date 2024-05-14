@@ -8,7 +8,6 @@ MAX_MESSAGE_LENGTH = 4096
 
 
 async def send_big_message(bot, user_id, text):
-    text = screen_symbols(text)
     print(text)
     for i in range(0, len(text), MAX_MESSAGE_LENGTH):
         try:
@@ -26,7 +25,7 @@ async def send_big_message(bot, user_id, text):
                 print(e)
         else:
             try:
-                await bot.send_message(user_id, text[i:i + MAX_MESSAGE_LENGTH])
+                await bot.send_message(user_id, screen_symbols(text[i:i + MAX_MESSAGE_LENGTH]))
                 break
             except Exception as e:
                 await bot.send_message(ADMIN_ID, e)
