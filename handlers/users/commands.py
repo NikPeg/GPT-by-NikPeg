@@ -134,7 +134,7 @@ async def help_message_handler(message: types.Message):
     )
     await UserState.gpt_request.set()
 
-@dp.message_handler(commands=['new'], state="*")
+@dp.message_handler(commands=['promo'], state="*")
 async def promo_message_handler(message: types.Message):
     await bot.send_message(message.chat.id, messages.PROMO_PROMPT)
     await bot.send_message(
