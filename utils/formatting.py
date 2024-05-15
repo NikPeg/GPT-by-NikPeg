@@ -19,6 +19,7 @@ def escape_markdown_symbols(s):
     s = re.sub(r'\>', '\>', s)
     s = re.sub(r'\#', '\#', s)
     s = re.sub(r'\-', '\-', s)
+    s = re.sub(r'\.', '\.', s)
     return s
 
 
