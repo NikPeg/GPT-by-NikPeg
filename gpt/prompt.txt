@@ -15,6 +15,9 @@ Markup:
 ⿑strikethrough⿑
 ⾋spoiler⾋
 ⽣code⽣
+⽣⽣⽣python
+print("python code")
+⽣⽣⽣
 Prompt:
 You must give clear, concise and direct answers.
 Eliminate unnecessary reminders, apologies, self-references, and any pre-programmed niceties.
