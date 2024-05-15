@@ -49,7 +49,7 @@ async def info_handler(call: types.CallbackQuery):
     price = config.PRICE * (100 - sale)
     if sale:
         price = f"~{config.PRICE}~ {price}"
-    await call.message.edit_text(HELP.format(price), reply_markup=return_markup())
+    await call.message.edit_text(HELP.format(price), reply_markup=return_markup(), parse_mode=ParseMode.MARKDOWN_V2)
     await bot.send_message(
         ADMIN_ID,
         messages.BUTTON_PRESSED.format(call.message.chat.id, call.message.chat.username, buttons.ABOUT.text),
