@@ -1,5 +1,5 @@
 from aiogram.types import ParseMode
-from utils.formatting import markdown_to_html, screen_symbols
+from utils.formatting import markdown_to_html, screen_symbols, escape_markdown_symbols
 
 from config import ADMIN_ID
 
@@ -11,7 +11,7 @@ async def send_big_message(bot, user_id, text):
     for i in range(0, len(text), MAX_MESSAGE_LENGTH):
         text_part = text[i:i + MAX_MESSAGE_LENGTH]
         try:
-            await bot.send_message(user_id, text_part, parse_mode=ParseMode.MARKDOWN_V2)
+            await bot.send_message(user_id, escape_markdown_symbols(text_part), parse_mode=ParseMode.MARKDOWN_V2)
             break
         except Exception as e:
             await bot.send_message(ADMIN_ID, e)
