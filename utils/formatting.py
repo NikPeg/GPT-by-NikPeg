@@ -12,21 +12,9 @@ def escape_symbols(s):
 
 
 def escape_markdown_symbols(s):
-    s = re.sub(r'\!', '\!', s)
-    s = re.sub(r'\=', '\=', s)
-    s = re.sub(r'\`', '\`', s)
-    s = re.sub(r'\<', '\<', s)
-    s = re.sub(r'\>', '\>', s)
-    s = re.sub(r'\#', '\#', s)
-    s = re.sub(r'\-', '\-', s)
-    s = re.sub(r'\.', '\.', s)
-    s = re.sub(r'\(', '\(', s)
-    s = re.sub(r'\)', '\)', s)
-    s = re.sub(r'\[', '\[', s)
-    s = re.sub(r'\]', '\]', s)
-    s = re.sub(r'\{', '\{', s)
-    s = re.sub(r'\}', '\}', s)
-    return s
+    characters_to_escape = set("([!@#$%^&()-={}\\[]./)")
+    escaped_string = ''.join(['\\' + char if char in characters_to_escape else char for char in s])
+    return escaped_string
 
 
 def markdown_to_html(s):
