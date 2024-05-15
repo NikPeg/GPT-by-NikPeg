@@ -4,7 +4,6 @@ import re
 def screen_symbols(s):
     s = re.escape(s)
     s = re.sub(r'\!', '\!', s)
-    s = re.sub(r'\.', '\.', s)
     s = re.sub(r'\`', '\`', s)
     return s
 
