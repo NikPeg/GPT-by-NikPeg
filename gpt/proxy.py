@@ -18,7 +18,7 @@ class GPTProxy:
     def __init__(self, token, model="gpt-3.5-turbo", bot=None):
         self.client = openai.OpenAI(api_key=token)
         self.model = model
-        self.assistant_id = ASSISTANT_ID or self.create_assistant("NikPeg bot", PROMPT)
+        self.assistant_id = ASSISTANT_ID or self.create_assistant("NikPeg bot", PROMPT, True)
         self.bot = bot
         self.aclient = AsyncOpenAI(api_key=token)
 
@@ -29,11 +29,12 @@ class GPTProxy:
         )
         return result.id
 
-    def create_assistant(self, name, instructions=""):
+    def create_assistant(self, name, instructions="", code_interpreter=False):
         assistant = self.client.beta.assistants.create(
             model=self.model,
             name=name,
             instructions=instructions,
+            tools=[{"type": "code_interpreter"}] if code_interpreter else [],
         )
         print("assistant_id:", assistant.id)
         return assistant.id
