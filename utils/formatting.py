@@ -2,17 +2,6 @@ import re
 
 
 def screen_symbols(s):
-    s = re.sub(r'\}', r'\\}', s)
-    s = re.sub(r'\@', r'\\@', s)
-    s = re.sub(r'\#', r'\\#', s)
-    s = re.sub(r'\$', r'\\$', s)
-    s = re.sub(r'\%', r'\\%', s)
-    s = re.sub(r'\&', r'\\&', s)
-    s = re.sub(r"\*", "\*", s)
-    return s
-
-
-def screen_markdownv2_symbols(s):
     s = re.sub(r'\@', '\@', s)
     s = re.sub(r'\.', '\.', s)
     s = re.sub(r'\!', '\!', s)
@@ -34,8 +23,17 @@ def screen_markdownv2_symbols(s):
     s = re.sub(r'\|', '\|', s)
     s = re.sub(r'\_', '\_', s)
     s = re.sub(r'\`', '\`', s)
+    return s
+
+
+def screen_markdownv2_symbols(s):
+    s = screen_symbols(s)
+    s = re.sub(r'\⻢', '*', s)
+    s = re.sub(r'\⾟', '_', s)
     s = re.sub(r'\⽡', '__', s)
     s = re.sub(r'\⾋', '||', s)
+    s = re.sub(r'\⿑', '~', s)
+    s = re.sub(r'\⽣', '`', s)
     return s
 
 
