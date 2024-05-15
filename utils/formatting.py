@@ -20,6 +20,7 @@ def screen_symbols(s):
     s = re.sub(r'\+', '\+', s)
     s = re.sub(r'\=', '\=', s)
     s = re.sub(r'\>', '\>', s)
+    s = re.sub(r'\<', '\<', s)
     s = re.sub(r'\|', '\|', s)
     s = re.sub(r'\_', '\_', s)
     s = re.sub(r'\`', '\`', s)

@@ -23,7 +23,7 @@ print("python code")
 fmt.Println("go code", j)
 ⽣⽣⽣
 
-⽣monospace⽣
+⽣code or monowidth string⽣
 Prompt:
 You must give clear, concise and direct answers.
 Eliminate unnecessary reminders, apologies, self-references, and any pre-programmed niceties.
