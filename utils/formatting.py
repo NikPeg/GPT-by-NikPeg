@@ -17,6 +17,7 @@ def escape_markdown_symbols(s):
     s = re.sub(r"\n### (.*?)\n", r"\n*\1*\n", s)
     s = re.sub(r"\n### (.*?)\n", r"\n*\1*\n", s)
     s = re.sub(r"\n### (.*?)$", r"\n*\1*", s)
+    s = re.sub(r"^### (.*?)$", r"\n*\1*", s)
 
     characters_to_escape = set("([!@#$%^&()-={}\\[]./)")
     escaped_string = ''.join(['\\' + char if char in characters_to_escape else char for char in s])
@@ -34,5 +35,6 @@ def markdown_to_html(s):
     s = re.sub(r"\n### (.*?)\n", r"\n<b>\1</b>\n", s)
     s = re.sub(r"\n### (.*?)\n", r"\n<b>\1</b>\n", s)
     s = re.sub(r"\n### (.*?)$", r"\n<b>\1</b>", s)
+    s = re.sub(r"^### (.*?)$", r"\n<b>\1</b>", s)
 
     return s
