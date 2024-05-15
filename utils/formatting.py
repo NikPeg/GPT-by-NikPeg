@@ -12,6 +12,12 @@ def escape_symbols(s):
 
 
 def escape_markdown_symbols(s):
+    # Заменяем заголовки
+    s = re.sub(r"^### (.*?)\n", r"*\1*\n", s)
+    s = re.sub(r"\n### (.*?)\n", r"\n*\1*\n", s)
+    s = re.sub(r"\n### (.*?)\n", r"\n*\1*\n", s)
+    s = re.sub(r"\n### (.*?)$", r"\n*\1*", s)
+
     characters_to_escape = set("([!@#$%^&()-={}\\[]./)")
     escaped_string = ''.join(['\\' + char if char in characters_to_escape else char for char in s])
     return escaped_string
