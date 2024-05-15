@@ -3,6 +3,7 @@ import asyncio
 import openai
 from aiogram import types
 from aiogram.dispatcher.filters.state import State, StatesGroup, default_state
+from aiogram.types import ParseMode
 from cloudpayments import Currency
 
 import config
@@ -15,7 +16,7 @@ from database.payment_db import check_subscribed, subscribe
 from database.promo_db import check_promo
 from database.sentence_db import random_sentence
 from database.session_db import create_new_session
-from database.user_db import add_new_user, update_sale
+from database.user_db import add_new_user, update_sale, get_sale
 from handlers.admin.commands import unsubscribe_message_handler
 from handlers.common import create_user_req
 from keyboards.keyboards import start_markup, return_markup, payment_markup
@@ -44,7 +45,11 @@ async def start_command_handler(message: types.Message):
 
 @dp.callback_query_handler(text='info', state="*")
 async def info_handler(call: types.CallbackQuery):
-    await call.message.edit_text(HELP.format(config.PRICE), reply_markup=return_markup())
+    sale = get_sale(call.message.chat.id)
+    price = config.PRICE * (100 - sale)
+    if sale:
+        price = f"~{config.PRICE}~ {price}"
+    await call.message.edit_text(HELP.format(price), reply_markup=return_markup())
     await bot.send_message(
         ADMIN_ID,
         messages.BUTTON_PRESSED.format(call.message.chat.id, call.message.chat.username, buttons.ABOUT.text),
@@ -116,7 +121,11 @@ async def paid_handler(message: types.Message):
 
 @dp.message_handler(commands=['help'], state="*")
 async def help_message_handler(message: types.Message):
-    await bot.send_message(message.chat.id, HELP.format(config.PRICE))
+    sale = get_sale(message.chat.id)
+    price = config.PRICE * (100 - sale)
+    if sale:
+        price = f"~{config.PRICE}~ {price}"
+    await bot.send_message(message.chat.id, HELP.format(price), parse_mode=ParseMode.MARKDOWN_V2)
     await bot.send_message(message.chat.id, PROMPT.format(random_sentence()))
     await bot.send_message(
         ADMIN_ID,
