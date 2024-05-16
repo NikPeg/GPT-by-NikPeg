@@ -45,7 +45,7 @@ async def start_command_handler(message: types.Message):
 
 def price_string(user_id):
     sale = get_sale(user_id)
-    price = config.PRICE * (100 - sale)
+    price = config.PRICE * (100 - sale) / 100
     if sale:
         price = f"~ {config.PRICE} ~ {price}"
     return price
