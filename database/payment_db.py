@@ -1,6 +1,7 @@
 from . import cursor, database
 import datetime
 
+from .user_db import get_sale
 
 DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 
@@ -13,11 +14,8 @@ def check_subscribed(user_id):
     cursor.execute("SELECT subscribed FROM User WHERE id=?", (user_id,))
     subscribed = bool(cursor.fetchone()[0])
     if not subscribed:
-        cursor.execute("SELECT sale FROM User WHERE id=?", (user_id,))
-        res = cursor.fetchone()
-        if res:
-            sale = int(res[0])
-            return sale == 100
+        sale = get_sale(user_id)
+        return sale == 100
     return subscribed
 
 

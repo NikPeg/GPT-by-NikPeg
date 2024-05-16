@@ -32,5 +32,9 @@ def update_sale(user_id, sale):
 
 def get_sale(user_id):
     cursor.execute("SELECT sale FROM User WHERE id=?;", (user_id,))
-    sale = cursor.fetchone()[0]
-    return sale
+    res = cursor.fetchone()
+    if res:
+        sale = cursor.fetchone()[0]
+        return sale
+    else:
+        return 0
