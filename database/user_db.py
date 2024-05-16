@@ -34,7 +34,7 @@ def get_sale(user_id):
     cursor.execute("SELECT sale FROM User WHERE id=?;", (user_id,))
     res = cursor.fetchone()
     if res:
-        sale = cursor.fetchone()[0]
+        sale = res[0]
         return sale
     else:
         return 0
