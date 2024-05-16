@@ -14,8 +14,10 @@ def check_subscribed(user_id):
     subscribed = bool(cursor.fetchone()[0])
     if not subscribed:
         cursor.execute("SELECT sale FROM User WHERE id=?", (user_id,))
-        sale = int(cursor.fetchone()[0])
-        return sale == 100
+        res = cursor.fetchone()
+        if res:
+            sale = int(res[0])
+            return sale == 100
     return subscribed
 
 
