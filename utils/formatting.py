@@ -20,7 +20,7 @@ def escape_markdown_symbols(s):
     s = re.sub(r"\n### (.*?)$", r"\n*\1*", s)
     s = re.sub(r"^### (.*?)$", r"\n*\1*", s)
 
-    characters_to_escape = set("!@#$%^&()+-={}\\[]./")
+    characters_to_escape = set("!@#$%^&()+-={}\\[]./<>")
     escaped_string = ''.join(['\\' + char if char in characters_to_escape else char for char in s])
     return escaped_string
 
