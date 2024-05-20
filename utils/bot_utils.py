@@ -22,25 +22,29 @@ async def send_big_message(bot, user_id, text):
             for symbol in symbols_stack:
                 text_part += symbol
         text_part += text[i:i + MAX_MESSAGE_LENGTH]
-
-        for j in range(0, len(text_part)):
+        j = 0
+        while j < len(text_part):
             if j + 3 <= len(text_part) and text_part[j:j + 3] == "```":
                 big_code_mode = not big_code_mode
+                j += 3
                 continue
             if text_part[j] == "`":
                 code_mode = not code_mode
+                j += 1
                 continue
             if not code_mode and j + 2 <= len(text_part) and text_part[j:j + 2] == "__":
                 if symbols_stack and symbols_stack[-1] == "__":
                     symbols_stack.pop()
                 else:
                     symbols_stack.append("__")
-            if not code_mode and text_part[j] in SPECIAL_SYMBOLS:
+                j += 2
+                continue
+            if not code_mode and not big_code_mode and text_part[j] in SPECIAL_SYMBOLS:
                 if symbols_stack and symbols_stack[-1] == text_part[j]:
                     symbols_stack.pop()
                 else:
                     symbols_stack.append(text_part[j])
-
+            j += 1
         if big_code_mode:
             text_part += "```"
         elif code_mode:
@@ -48,7 +52,6 @@ async def send_big_message(bot, user_id, text):
         else:
             for symbol in symbols_stack[::-1]:
                 text_part += symbol
-
         try:
             await bot.send_message(user_id, escape_markdown_symbols(text_part), parse_mode=ParseMode.MARKDOWN_V2)
             break
