@@ -6,6 +6,7 @@ from database.message_db import add_new_message
 from database.session_db import get_thread_id
 from loader import bot, gpt
 from utils.bot_utils import send_big_message
+from utils.formatting import escape
 
 TYPING_ACTION = "typing"
 
@@ -18,7 +19,7 @@ async def create_user_req(user_id, user_name, request_text):
     await send_big_message(
         bot,
         ADMIN_ID,
-        messages.MESSAGE_SENT.format(user_id, user_name, request_text),
+        messages.MESSAGE_SENT.format(user_id, escape(user_name), request_text),
     )
     thread_id = get_thread_id(user_id)
     await typing()

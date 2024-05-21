@@ -12,7 +12,6 @@ from database.user_db import get_all_users
 from handlers.common import create_user_req
 from loader import dp, bot, client
 from payments import SubscriptionStatus
-from utils.formatting import escape
 
 
 @dp.message_handler(commands=['answer'], state="*")
@@ -80,7 +79,7 @@ async def unsubscribe_message_handler(message: types.Message):
         await bot.send_message(ADMIN_ID, messages.WRONG_MESSAGE)
         return
     user_id = int(message.reply_to_message.text.split()[1])
-    username = escape(message.reply_to_message.text.split()[4][1:])
+    username = message.reply_to_message.text.split()[4][1:]
     await bot.send_message(ADMIN_ID, messages.UNSUBSCRIBING.format(user_id, username))
     for sub in client.list_subscriptions(user_id):
         if sub.status == SubscriptionStatus.ACTIVE.value:
