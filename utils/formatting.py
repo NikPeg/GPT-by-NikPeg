@@ -39,3 +39,8 @@ def markdown_to_html(s):
     s = re.sub(r"^### (.*?)$", r"\n<b>\1</b>", s)
 
     return s
+
+
+def escape(s):
+    s = re.sub(r'\_', '\_', s)
+    return s

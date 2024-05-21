@@ -22,6 +22,7 @@ from handlers.common import create_user_req
 from keyboards.keyboards import start_markup, return_markup, payment_markup
 from loader import dp, bot, client
 from messages import HELP, START, PROMPT, NEW_PROMPT
+from utils.formatting import escape
 
 
 class UserState(StatesGroup):
@@ -38,7 +39,7 @@ async def start_command_handler(message: types.Message):
     await bot.send_message(message.chat.id, PROMPT.format(random_sentence()))
     await bot.send_message(
         ADMIN_ID,
-        messages.BUTTON_PRESSED.format(message.chat.id, message.chat.username, message.text),
+        messages.BUTTON_PRESSED.format(message.chat.id, escape(message.chat.username), message.text),
     )
     await UserState.gpt_request.set()
 
@@ -56,7 +57,7 @@ async def info_handler(call: types.CallbackQuery):
     await call.message.edit_text(HELP.format(price_string(call.message.chat.id)), reply_markup=return_markup(), parse_mode=ParseMode.MARKDOWN_V2)
     await bot.send_message(
         ADMIN_ID,
-        messages.BUTTON_PRESSED.format(call.message.chat.id, call.message.chat.username, buttons.ABOUT.text),
+        messages.BUTTON_PRESSED.format(call.message.chat.id, escape(call.message.chat.username), buttons.ABOUT.text),
     )
 
 
@@ -65,7 +66,7 @@ async def return_handler(call: types.CallbackQuery):
     await call.message.edit_text(START, reply_markup=start_markup())
     await bot.send_message(
         ADMIN_ID,
-        messages.BUTTON_PRESSED.format(call.message.chat.id, call.message.chat.username, buttons.BACK.text),
+        messages.BUTTON_PRESSED.format(call.message.chat.id, escape(call.message.chat.username), buttons.BACK.text),
     )
 
 
@@ -84,7 +85,7 @@ async def payment_handler(call: types.CallbackQuery):
     await call.message.edit_text(messages.PAYMENT_LINK.format(link), reply_markup=return_markup())
     await bot.send_message(
         ADMIN_ID,
-        messages.BUTTON_PRESSED.format(call.message.chat.id, call.message.chat.username, buttons.PAYMENT.text),
+        messages.BUTTON_PRESSED.format(call.message.chat.id, escape(call.message.chat.username), buttons.PAYMENT.text),
     )
     await UserState.payment.set()
     for i in range(SUBSCRIPTION_CHECKS_COUNT):
@@ -95,7 +96,7 @@ async def payment_handler(call: types.CallbackQuery):
                 await bot.send_message(call.message.chat.id, messages.PAYMENT_THANK, reply_markup=return_markup())
                 await bot.send_message(
                     ADMIN_ID,
-                    messages.USER_PAID.format(call.message.chat.id, call.message.chat.username),
+                    messages.USER_PAID.format(call.message.chat.id, escape(call.message.chat.username)),
                 )
                 return
             await asyncio.sleep(10)
@@ -113,13 +114,13 @@ async def paid_handler(message: types.Message):
             await bot.send_message(message.chat.id, messages.PAYMENT_THANK, reply_markup=return_markup())
             await bot.send_message(
                 ADMIN_ID,
-                messages.USER_PAID.format(message.chat.id, message.chat.username),
+                messages.USER_PAID.format(message.chat.id, escape(message.chat.username)),
             )
             return
     await bot.send_message(message.chat.id, messages.PAYMENT_PROCESS, reply_markup=payment_markup())
     await bot.send_message(
         ADMIN_ID,
-        messages.MESSAGE_SENT.format(message.chat.id, message.chat.username, message.text),
+        messages.MESSAGE_SENT.format(message.chat.id, escape(message.chat.username), message.text),
     )
 
 
@@ -129,7 +130,7 @@ async def help_message_handler(message: types.Message):
     await bot.send_message(message.chat.id, PROMPT.format(random_sentence()))
     await bot.send_message(
         ADMIN_ID,
-        messages.BUTTON_PRESSED.format(message.chat.id, message.chat.username, message.text),
+        messages.BUTTON_PRESSED.format(message.chat.id, escape(message.chat.username), message.text),
     )
 
 
@@ -139,9 +140,10 @@ async def help_message_handler(message: types.Message):
     create_new_session(message.chat.id)
     await bot.send_message(
         ADMIN_ID,
-        messages.BUTTON_PRESSED.format(message.chat.id, message.chat.username, message.text),
+        messages.BUTTON_PRESSED.format(message.chat.id, escape(message.chat.username), message.text),
     )
     await UserState.gpt_request.set()
+
 
 @dp.callback_query_handler(text='promo', state="*")
 async def promo_message_handler(call: types.CallbackQuery):
@@ -149,7 +151,7 @@ async def promo_message_handler(call: types.CallbackQuery):
     await bot.send_message(call.message.chat.id, messages.PROMO_PROMPT, reply_markup=return_markup())
     await bot.send_message(
         ADMIN_ID,
-        messages.BUTTON_PRESSED.format(call.message.chat.id, call.message.chat.username, buttons.PROMO.text),
+        messages.BUTTON_PRESSED.format(call.message.chat.id, escape(call.message.chat.username), buttons.PROMO.text),
     )
     await UserState.promo.set()
 
@@ -159,7 +161,7 @@ async def promo_message_handler(message: types.Message):
     promo = message.text
     await bot.send_message(
         ADMIN_ID,
-        messages.ENTERED_PROMO.format(message.chat.id, message.chat.username, promo),
+        messages.ENTERED_PROMO.format(message.chat.id, escape(message.chat.username), promo),
     )
     sale = check_promo(promo)
     if sale:
@@ -183,13 +185,18 @@ async def user_gpt_req_handler(message: types.Message):
             messages.EXPIRED_PAYMENT.format(config.PRICE),
             reply_markup=payment_markup(),
         )
-        await bot.send_message(ADMIN_ID,
-                               messages.USER_EXPIRED_PAYMENT.format(message.chat.id, message.chat.username))
+        await bot.send_message(
+            ADMIN_ID,
+            messages.USER_EXPIRED_PAYMENT.format(
+                message.chat.id,
+                escape(message.chat.username),
+            )
+        )
         return
 
     request_text = message.text
     try:
-        await asyncio.create_task(create_user_req(message.chat.id, message.chat.username, request_text))
+        await asyncio.create_task(create_user_req(message.chat.id, escape(message.chat.username), request_text))
     except openai.BadRequestError as e:
         await bot.send_message(message.chat.id, messages.WAIT)
         await bot.send_message(ADMIN_ID, messages.WAIT + e)
