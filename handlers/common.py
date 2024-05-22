@@ -9,9 +9,9 @@ from utils.bot_utils import send_big_message
 TYPING_ACTION = "typing"
 
 
-async def create_user_req(user_id, user_name, request_text, files=None):
+async def create_user_req(user_id, user_name, request_text, file_paths=None):
     print("creating user req")
-    if files is None:
+    if file_paths is None:
         files = []
 
     async def typing():
@@ -22,7 +22,7 @@ async def create_user_req(user_id, user_name, request_text, files=None):
     await send_big_message(bot, ADMIN_ID, request_text)
     thread_id = get_thread_id(user_id)
     await typing()
-    await gpt.add_message(thread_id, request_text, files)
+    await gpt.add_message(thread_id, request_text, file_paths)
     await typing()
     bot_answer = await gpt.get_answer(thread_id, typing)
     await send_big_message(bot, user_id, bot_answer)

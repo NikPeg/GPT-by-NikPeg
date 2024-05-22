@@ -3,6 +3,7 @@ import time
 import openai
 from openai import AsyncOpenAI
 from tenacity import retry, stop_after_attempt, wait_fixed
+from pathlib import Path
 
 from .models import *
 from .prompts import PROMPT
@@ -40,13 +41,13 @@ class GPTProxy:
         print("assistant_id:", assistant.id)
         return assistant.id
 
-    async def add_message(self, thread_id, user_question, files=None):
-        if files is None:
-            files = []
+    async def add_message(self, thread_id, user_question, file_paths=None):
+        if file_paths is None:
+            file_paths = []
         file_ids = []
-        for file in files:
+        for path in file_paths:
             file_ids.append(self.client.files.create(
-                file=file,
+                file=Path(path),
                 purpose="assistants",
             ).id)
         print("file_ids:", file_ids)
