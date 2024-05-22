@@ -204,10 +204,10 @@ async def user_gpt_req_handler(message: types.Message):
             files.append(photo_file)
         print("photos", files)
 
-    try:
-        await asyncio.create_task(create_user_req(message.chat.id, message.chat.username, request_text, files or None))
-    except openai.BadRequestError as e:
-        await bot.send_message(message.chat.id, messages.WAIT)
-        await bot.send_message(ADMIN_ID, messages.WAIT + e)
-    except Exception as e:
-        await bot.send_message(ADMIN_ID, messages.UNKNOWN_ERROR.format(str(e)))
+    # try:
+    await asyncio.create_task(create_user_req(message.chat.id, message.chat.username, request_text, files or None))
+    # except openai.BadRequestError as e:
+    #     await bot.send_message(message.chat.id, messages.WAIT)
+    #     await bot.send_message(ADMIN_ID, messages.WAIT + e)
+    # except Exception as e:
+    #     await bot.send_message(ADMIN_ID, messages.UNKNOWN_ERROR.format(str(e.__traceback__)))
