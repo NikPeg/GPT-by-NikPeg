@@ -55,12 +55,11 @@ class GPTProxy:
                 file=Path(path),
                 purpose="assistants",
             ).id)
-        print("question:", user_question)
         message = await self.aclient.beta.threads.messages.create(
             thread_id=thread_id,
             content=[
                         {
-                            "text": "What is it?",
+                            "text": user_question or "",
                             "type": "text",
                         },
                     ] + [
@@ -72,14 +71,6 @@ class GPTProxy:
                             }
                         } for file_id in file_ids
                     ],
-            #     {
-            #         "image_url": {
-            #             "url": f"data:image/jpeg;base64,{self.encode_image(image_path)}",
-            #             "detail": "low",
-            #         },
-            #         "type": "image_url",
-            #     }
-            # ],
             role="user",
             # attachments=[Attachment(file_id=file_id, tools=FileSearchToolParam) for file_id in file_ids],
         )
