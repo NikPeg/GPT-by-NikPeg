@@ -1,10 +1,11 @@
-import openai
-from tenacity import retry, stop_after_attempt, wait_fixed
-from .models import *
-from openai import AsyncOpenAI
 import time
-from .prompts import PROMPT
 
+import openai
+from openai import AsyncOpenAI
+from tenacity import retry, stop_after_attempt, wait_fixed
+
+from .models import *
+from .prompts import PROMPT
 
 try:
     from config import ASSISTANT_ID
@@ -52,15 +53,15 @@ class GPTProxy:
         message = await self.aclient.beta.threads.messages.create(
             thread_id=thread_id,
             content=[
-                {
-                    "type": "text",
-                    "text": user_question
-                },
-                {
-                    "type": "image_file",
-                    "image_file": {"file_id": file_ids[0], "detail": "low"}
-                },
-            ],
+                        {
+                            "type": "text",
+                            "text": user_question
+                        },
+                    ] + [
+                        {
+                            "type": "image_file",
+                            "image_file": {"file_id": file_id, "detail": "low"}
+                        } for file_id in file_ids],
             role="user",
         )
         return message
