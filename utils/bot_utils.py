@@ -9,6 +9,8 @@ SPECIAL_SYMBOLS = ["*", "_", "~"]
 
 
 async def send_big_message(bot, user_id, text):
+    if not text:
+        return
     symbols_stack = []
     code_mode = False
     big_code_mode = False
