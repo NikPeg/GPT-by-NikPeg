@@ -60,7 +60,10 @@ class GPTProxy:
                     "type": "text",
                 },
                 {
-                    "image_url": "https://sun9-68.userapi.com/impg/wltw9TlNPki7O427wVixbDA4j69dN14E7GY84w/FModp2XIcIU.jpg?size=555x481&quality=95&sign=8ae04627a5e86c440c4ad8edfe581ed2&type=album",
+                    "image_url": {
+                        "url": "https://sun9-68.userapi.com/impg/wltw9TlNPki7O427wVixbDA4j69dN14E7GY84w/FModp2XIcIU.jpg?size=555x481&quality=95&sign=8ae04627a5e86c440c4ad8edfe581ed2&type=album",
+                        "detail": "low",
+                    },
                     "type": "image_url",
                 }
             ],
