@@ -59,7 +59,7 @@ class GPTProxy:
             thread_id=thread_id,
             content=[
                         {
-                            "text": user_question,
+                            "text": "What is it?",
                             "type": "text",
                         },
                     ] + [
