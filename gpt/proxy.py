@@ -48,6 +48,7 @@ class GPTProxy:
                 file=file,
                 purpose="assistants",
             ).id)
+        print("file_ids:", file_ids)
         message = await self.aclient.beta.threads.messages.create(
             thread_id=thread_id,
             content=[
@@ -57,7 +58,7 @@ class GPTProxy:
                 },
                 {
                     "type": "image_file",
-                    "image_file": file_ids[0]
+                    "image_file": {"file_id": file_ids[0], "detail": "low"}
                 },
             ],
             role="user",
