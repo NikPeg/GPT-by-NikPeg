@@ -48,12 +48,7 @@ class GPTProxy:
     async def add_message(self, thread_id, user_question, file_paths=None):
         if file_paths is None:
             file_paths = []
-        file_ids = []
-        # for path in file_paths:
-        #     file_ids.append(self.client.files.create(
-        #         file=Path(path),
-        #         purpose="assistants",
-        #     ).id)
+        image_path = "test.jpg"
         message = await self.aclient.beta.threads.messages.create(
             thread_id=thread_id,
             content=[
@@ -68,7 +63,7 @@ class GPTProxy:
                                 "detail": "low",
                             },
                             "type": "image_url",
-                        } for image_path in file_paths
+                        }
                     ],
             role="user",
             # attachments=[Attachment(file_id=file_id, tools=FileSearchToolParam) for file_id in file_ids],
