@@ -10,6 +10,7 @@ TYPING_ACTION = "typing"
 
 
 async def create_user_req(user_id, user_name, request_text, files=None):
+    print("creating user req")
     if files is None:
         files = []
 
