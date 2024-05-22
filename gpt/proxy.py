@@ -59,10 +59,10 @@ class GPTProxy:
             thread_id=thread_id,
             content=[
                         {
-                            "text": user_question or "",
+                            "text": user_question,
                             "type": "text",
                         },
-                    ] + [
+                    ] if user_question else [] + [
                         {
                             "type": "image_file",
                             "image_file": {
