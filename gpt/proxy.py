@@ -56,8 +56,11 @@ class GPTProxy:
             content=[
                         {
                             "type": "text",
-                            "text": user_question
-                        },
+                            "text": {
+                                "value": user_question,
+                                "annotations": []
+                            }
+                        }
                     ] + [
                         {
                             "type": "image_file",

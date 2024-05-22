@@ -212,7 +212,7 @@ async def user_gpt_req_handler(message: types.Message):
         await asyncio.create_task(create_user_req(message.chat.id, message.chat.username, request_text, file_paths or None))
     except openai.BadRequestError as e:
         await bot.send_message(message.chat.id, messages.WAIT)
-        await bot.send_message(ADMIN_ID, messages.WAIT + e)
+        await bot.send_message(ADMIN_ID, messages.WAIT + str(e))
     except Exception as e:
         await bot.send_message(ADMIN_ID, messages.UNKNOWN_ERROR.format(str(e)))
         print(traceback.format_exc())
