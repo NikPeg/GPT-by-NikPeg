@@ -171,9 +171,10 @@ async def promo_message_handler(message: types.Message):
     await UserState.gpt_request.set()
 
 
-@dp.message_handler(state=UserState.gpt_request)
-@dp.message_handler(state=default_state)
+@dp.message_handler(content_types=['photo', 'text'], state=UserState.gpt_request)
+@dp.message_handler(content_types=['photo', 'text'], state=default_state)
 async def user_gpt_req_handler(message: types.Message):
+    print("user request handler")
     if message.chat.id == ADMIN_ID:
         if message.text == '/unsubscribe':
             return await unsubscribe_message_handler(message)
