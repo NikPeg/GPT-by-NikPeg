@@ -196,6 +196,7 @@ async def user_gpt_req_handler(message: types.Message):
 
     request_text = message.text
     print("text:", request_text)
+    print("message", message)
     file_paths = []
     if message.photo:
         print("found photo")
