@@ -54,8 +54,8 @@ class GPTProxy:
         message = await self.aclient.beta.threads.messages.create(
             thread_id=thread_id,
             content=user_question,
-            file_ids=file_ids,
             role="user",
+            attachments=file_ids,
         )
         return message
 
