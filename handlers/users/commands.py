@@ -201,8 +201,8 @@ async def user_gpt_req_handler(message: types.Message):
         print("found photo")
         # Loop through each photo and download it
         for photo in message.photo:
-            photo_file = await photo.download()
-            files.append(photo_file)
+            # photo_file = await photo.download()
+            files.append(photo)
         print("photos", files)
 
     try:
