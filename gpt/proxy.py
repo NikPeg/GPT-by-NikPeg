@@ -1,11 +1,9 @@
+import base64
 import time
 
 import openai
 from openai import AsyncOpenAI
-from openai.types.beta import FileSearchToolParam
-from openai.types.beta.threads.message_create_params import Attachment
 from tenacity import retry, stop_after_attempt, wait_fixed
-from pathlib import Path
 
 from .models import *
 from .prompts import PROMPT
@@ -43,6 +41,10 @@ class GPTProxy:
         print("assistant_id:", assistant.id)
         return assistant.id
 
+    def encode_image(self, image_path):
+        with open(image_path, "rb") as image_file:
+            return base64.b64encode(image_file.read()).decode('utf-8')
+
     async def add_message(self, thread_id, user_question, file_paths=None):
         if file_paths is None:
             file_paths = []
@@ -55,18 +57,19 @@ class GPTProxy:
         message = await self.aclient.beta.threads.messages.create(
             thread_id=thread_id,
             content=[
-                {
-                    "text": user_question,
-                    "type": "text",
-                },
-                {
-                    "image_url": {
-                        "url": "https://sun9-68.userapi.com/impg/wltw9TlNPki7O427wVixbDA4j69dN14E7GY84w/FModp2XIcIU.jpg?size=555x481&quality=95&sign=8ae04627a5e86c440c4ad8edfe581ed2&type=album",
-                        "detail": "low",
-                    },
-                    "type": "image_url",
-                }
-            ],
+                        {
+                            "text": user_question,
+                            "type": "text",
+                        },
+                    ] + [
+                        {
+                            "image_url": {
+                                "url": f"data:image/jpeg;base64,{self.encode_image(image_path)}",
+                                "detail": "low",
+                            },
+                            "type": "image_url",
+                        } for image_path in file_paths
+                    ],
             role="user",
             # attachments=[Attachment(file_id=file_id, tools=FileSearchToolParam) for file_id in file_ids],
         )
