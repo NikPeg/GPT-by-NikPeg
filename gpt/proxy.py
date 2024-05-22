@@ -50,9 +50,17 @@ class GPTProxy:
             ).id)
         message = await self.aclient.beta.threads.messages.create(
             thread_id=thread_id,
-            content=user_question,
+            content=[
+                {
+                    "type": "text",
+                    "text": user_question
+                },
+                {
+                    "type": "image_file",
+                    "image_file": file_ids[0]
+                },
+            ],
             role="user",
-            file_ids=file_ids,
         )
         return message
 
