@@ -210,5 +210,6 @@ async def user_gpt_req_handler(message: types.Message):
     except openai.BadRequestError as e:
         await bot.send_message(message.chat.id, messages.WAIT)
         await bot.send_message(ADMIN_ID, messages.WAIT + e)
-    except Exception:
-        await bot.send_message(ADMIN_ID, messages.UNKNOWN_ERROR.format(traceback.format_exc()))
+    except Exception as e:
+        await bot.send_message(ADMIN_ID, messages.UNKNOWN_ERROR.format(e))
+        print(traceback.format_exc())
