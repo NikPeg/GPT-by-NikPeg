@@ -1,5 +1,6 @@
 import base64
 import time
+from pathlib import Path
 
 import openai
 from openai import AsyncOpenAI
@@ -48,6 +49,12 @@ class GPTProxy:
     async def add_message(self, thread_id, user_question, file_paths=None):
         if file_paths is None:
             file_paths = []
+        file_ids = []
+        for path in file_paths:
+            file_ids.append(self.client.files.create(
+                file=Path(path),
+                purpose="assistants",
+            ).id)
         message = await self.aclient.beta.threads.messages.create(
             thread_id=thread_id,
             content=[
@@ -55,15 +62,23 @@ class GPTProxy:
                             "text": user_question,
                             "type": "text",
                         },
-                    ] + [],
-                    #     {
-                    #         "image_url": {
-                    #             "url": f"data:image/jpeg;base64,{self.encode_image(image_path)}",
-                    #             "detail": "low",
-                    #         },
-                    #         "type": "image_url",
-                    #     }
-                    # ],
+                    ] + [
+                        {
+                            "type": "image_file",
+                            "image_file": {
+                                "file_id": file_id,
+                                "detail": "low",
+                            }
+                        } for file_id in file_ids
+                    ],
+            #     {
+            #         "image_url": {
+            #             "url": f"data:image/jpeg;base64,{self.encode_image(image_path)}",
+            #             "detail": "low",
+            #         },
+            #         "type": "image_url",
+            #     }
+            # ],
             role="user",
             # attachments=[Attachment(file_id=file_id, tools=FileSearchToolParam) for file_id in file_ids],
         )
