@@ -55,6 +55,7 @@ class GPTProxy:
                 file=Path(path),
                 purpose="assistants",
             ).id)
+        print("question:", user_question)
         message = await self.aclient.beta.threads.messages.create(
             thread_id=thread_id,
             content=[
