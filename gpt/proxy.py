@@ -2,6 +2,8 @@ import time
 
 import openai
 from openai import AsyncOpenAI
+from openai.types.beta import FileSearchToolParam
+from openai.types.beta.threads.message_create_params import Attachment
 from tenacity import retry, stop_after_attempt, wait_fixed
 from pathlib import Path
 
@@ -45,17 +47,25 @@ class GPTProxy:
         if file_paths is None:
             file_paths = []
         file_ids = []
-        for path in file_paths:
-            file_ids.append(self.client.files.create(
-                file=Path(path),
-                purpose="assistants",
-            ).id)
-        print("file_ids:", file_ids)
+        # for path in file_paths:
+        #     file_ids.append(self.client.files.create(
+        #         file=Path(path),
+        #         purpose="assistants",
+        #     ).id)
         message = await self.aclient.beta.threads.messages.create(
             thread_id=thread_id,
-            content=user_question,
+            content=[
+                {
+                    "text": user_question,
+                    "type": "text",
+                },
+                {
+                    "image_url": "https://sun9-68.userapi.com/impg/wltw9TlNPki7O427wVixbDA4j69dN14E7GY84w/FModp2XIcIU.jpg?size=555x481&quality=95&sign=8ae04627a5e86c440c4ad8edfe581ed2&type=album",
+                    "type": "image_url",
+                }
+            ],
             role="user",
-            attachments=file_ids,
+            # attachments=[Attachment(file_id=file_id, tools=FileSearchToolParam) for file_id in file_ids],
         )
         return message
 

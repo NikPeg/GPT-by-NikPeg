@@ -11,8 +11,6 @@ TYPING_ACTION = "typing"
 
 async def create_user_req(user_id, user_name, request_text, file_paths=None):
     print("creating user req")
-    if file_paths is None:
-        files = []
 
     async def typing():
         await bot.send_chat_action(user_id, TYPING_ACTION)
