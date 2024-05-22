@@ -57,7 +57,7 @@ class GPTProxy:
                         {
                             "type": "text",
                             "text": {
-                                "value": user_question,
+                                "value": "Hello",
                                 "annotations": []
                             }
                         }
