@@ -39,11 +39,20 @@ class GPTProxy:
         print("assistant_id:", assistant.id)
         return assistant.id
 
-    async def add_message(self, thread_id, user_question):
+    async def add_message(self, thread_id, user_question, files=None):
+        if files is None:
+            files = []
+        file_ids = []
+        for file in files:
+            file_ids.append(self.client.files.create(
+                file=file,
+                purpose="assistants",
+            ).id)
         message = await self.aclient.beta.threads.messages.create(
             thread_id=thread_id,
+            content=user_question,
             role="user",
-            content= user_question
+            file_ids=file_ids,
         )
         return message
 
