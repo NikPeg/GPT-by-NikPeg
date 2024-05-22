@@ -1,5 +1,5 @@
 import asyncio
-
+import traceback
 import openai
 from aiogram import types
 from aiogram.dispatcher.filters.state import State, StatesGroup, default_state
@@ -210,5 +210,5 @@ async def user_gpt_req_handler(message: types.Message):
     except openai.BadRequestError as e:
         await bot.send_message(message.chat.id, messages.WAIT)
         await bot.send_message(ADMIN_ID, messages.WAIT + e)
-    except Exception as e:
-        await bot.send_message(ADMIN_ID, messages.UNKNOWN_ERROR.format(str(e.__traceback__)))
+    except Exception:
+        await bot.send_message(ADMIN_ID, messages.UNKNOWN_ERROR.format(traceback.format_exc()))
