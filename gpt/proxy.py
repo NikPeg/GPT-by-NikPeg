@@ -52,7 +52,7 @@ class GPTProxy:
         file_ids = []
         for path in file_paths:
             file_ids.append(self.client.files.create(
-                file=Path(path),
+                file=Path("test.jpg"),
                 purpose="assistants",
             ).id)
         try:
