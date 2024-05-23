@@ -36,6 +36,8 @@ def get_run_id(user_id):
 
 
 def set_run_id(user_id, run_id):
+    print("set run")
+    print(user_id, run_id)
     cursor.execute(
         """UPDATE Session
 SET run = ?
