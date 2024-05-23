@@ -24,10 +24,10 @@ async def create_user_req(user_id, user_name, request_text, file_paths=None):
     if current_run:
         await gpt.cancel_run(thread_id, current_run)
     await typing()
-    run_id = gpt.create_run(thread_id)
-    await typing()
-    set_run_id(user_id, run_id)
-    bot_answer = await gpt.get_answer(thread_id, typing, run_id)
+    # run_id = gpt.create_run(thread_id)
+    # await typing()
+    # set_run_id(user_id, run_id)
+    bot_answer = await gpt.get_answer(thread_id, typing, None)
     if not bot_answer:
         return
     await send_big_message(bot, user_id, bot_answer)

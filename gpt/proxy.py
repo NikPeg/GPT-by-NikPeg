@@ -87,18 +87,19 @@ class GPTProxy:
         )
 
     async def create_run(self, thread_id):
-        run = await self.aclient.beta.threads.runs.create(
-            thread_id=thread_id,
-            assistant_id=self.assistant_id,
-        )
-        return run.id
-
-    async def get_answer(self, thread_id, func, run_id):
         # run = await self.aclient.beta.threads.runs.create(
         #     thread_id=thread_id,
         #     assistant_id=self.assistant_id,
         # )
-        # run_id = run.id
+        # return run.id
+        return None
+
+    async def get_answer(self, thread_id, func, run_id):
+        run = await self.aclient.beta.threads.runs.create(
+            thread_id=thread_id,
+            assistant_id=self.assistant_id,
+        )
+        run_id = run.id
         while True:
             await func()
             run_info = await self.aclient.beta.threads.runs.retrieve(thread_id=thread_id, run_id=run_id)
