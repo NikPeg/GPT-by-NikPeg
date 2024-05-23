@@ -55,7 +55,7 @@ class GPTProxy:
                             "detail": "low",
                         }
                     } for path in photo_paths
-                ],
+                ] or "",
                 role="user",
                 attachments=[{"file_id": self.upload_file(path), "tools": [{"type": "file_search"}]} for path in file_paths],
             )
