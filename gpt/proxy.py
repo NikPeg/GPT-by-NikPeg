@@ -44,35 +44,8 @@ class GPTProxy:
         print("assistant_id:", assistant.id)
         return assistant.id
 
-    async def add_message(self, thread_id, user_question, photo_paths=None, file_paths=None):
-        if photo_paths is None:
-            photo_paths = []
-        if file_paths is None:
-            file_paths = []
-        try:
-            message = await self.aclient.beta.threads.messages.create(
-                thread_id=thread_id,
-                content=[
-                            {
-                                "text": user_question,
-                                "type": "text",
-                            },
-                        ] if user_question else [] + [
-                            {
-                                "type": "image_file",
-                                "image_file": {
-                                    "file_id": self.upload_file(path),
-                                    "detail": "low",
-                                }
-                            } for path in photo_paths
-                        ],
-                role="user",
-                attachments=[Attachment(file_id=file_id, tools=["file_search"]) for file_id in file_paths],
-            )
-        except openai.BadRequestError:
-            last_run = await self.last_run(thread_id)
-            if last_run:
-                await self.cancel_run(thread_id, last_run)
+    async def add_message(self, thread_id, user_question="", photo_paths=None, file_paths=None):
+        async def create_message():
             message = await self.aclient.beta.threads.messages.create(
                 thread_id=thread_id,
                 content=[
@@ -92,7 +65,20 @@ class GPTProxy:
                 role="user",
                 attachments=[Attachment(file_id=file_id, tools=["file_search"]) for file_id in file_paths],
             )
-        return message
+            return message
+
+        if photo_paths is None:
+            photo_paths = []
+        if file_paths is None:
+            file_paths = []
+        for i in range(5):
+            try:
+                message = await create_message()
+                return message
+            except openai.BadRequestError:
+                last_run = await self.last_run(thread_id)
+                if last_run:
+                    await self.cancel_run(thread_id, last_run)
 
     def create_thread(self):
         thread = self.client.beta.threads.create()
