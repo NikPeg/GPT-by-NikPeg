@@ -176,8 +176,8 @@ async def promo_message_handler(message: types.Message):
     await UserState.gpt_request.set()
 
 
-@dp.message_handler(content_types=['photo', 'text'], state=UserState.gpt_request)
-@dp.message_handler(content_types=['photo', 'text'], state=default_state)
+@dp.message_handler(content_types=['photo', 'text', 'document'], state=UserState.gpt_request)
+@dp.message_handler(content_types=['photo', 'text', 'document'], state=default_state)
 async def user_gpt_req_handler(message: types.Message):
     print("user request handler")
     if message.chat.id == ADMIN_ID:
