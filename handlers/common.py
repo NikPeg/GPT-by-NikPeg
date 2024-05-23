@@ -26,9 +26,6 @@ async def create_user_req(user_id, user_name, request_text, file_paths=None):
     await bot.send_message(ADMIN_ID, "CREATING NEW RUN")
     run_id = await gpt.create_run(thread_id)
     await bot.send_message(ADMIN_ID, "NEW RUN " + str(run_id))
-    # await typing()
-    # set_run_id(user_id, run_id)
-    # await bot.send_message(ADMIN_ID, "SET RUN IN DB")
     await bot.send_message(ADMIN_ID, "GETTING ANSWER")
     bot_answer = await gpt.get_answer(thread_id, typing, run_id)
     if not bot_answer:

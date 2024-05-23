@@ -75,8 +75,7 @@ class GPTProxy:
                 role="user",
                 # attachments=[Attachment(file_id=file_id, tools=FileSearchToolParam) for file_id in file_ids],
             )
-        except Exception as e:
-            print(e)
+        except openai.BadRequestError:
             last_run = await self.last_run(thread_id)
             if last_run:
                 await self.cancel_run(thread_id, last_run)
@@ -112,15 +111,13 @@ class GPTProxy:
         return None
 
     async def cancel_run(self, thread_id, run_id):
-        run_info = await self.aclient.beta.threads.runs.retrieve(thread_id=thread_id, run_id=run_id)
-        if run_info.completed_at:
-            print("NOTHING TO CANCEL!")
+        try:
+            await self.aclient.beta.threads.runs.cancel(
+                thread_id=thread_id,
+                run_id=run_id,
+            )
+        except openai.BadRequestError:
             return
-        print("CANCELLING")
-        await self.aclient.beta.threads.runs.cancel(
-            thread_id=thread_id,
-            run_id=run_id,
-        )
 
     async def create_run(self, thread_id):
         try:
@@ -128,8 +125,7 @@ class GPTProxy:
                 thread_id=thread_id,
                 assistant_id=self.assistant_id,
             )
-        except Exception as e:
-            print(e)
+        except openai.BadRequestError:
             last_run = await self.last_run(thread_id)
             if last_run:
                 await self.cancel_run(thread_id, last_run)
