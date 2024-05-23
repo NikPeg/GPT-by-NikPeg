@@ -85,6 +85,7 @@ class GPTProxy:
         if run_info.completed_at:
             print("NOTHING TO CANCEL!")
             return
+        print("CANCELLING")
         await self.aclient.beta.threads.runs.cancel(
             thread_id=thread_id,
             run_id=run_id,
@@ -99,14 +100,10 @@ class GPTProxy:
         # return None
 
     async def get_answer(self, thread_id, func, run_id):
-        # run = await self.aclient.beta.threads.runs.create(
-        #     thread_id=thread_id,
-        #     assistant_id=self.assistant_id,
-        # )
-        # run_id = run.id
         while True:
             await func()
             run_info = await self.aclient.beta.threads.runs.retrieve(thread_id=thread_id, run_id=run_id)
+            print("STATUS", run_info.status)
             if run_info.completed_at:
                 break
             if run_info.cancelled_at:
