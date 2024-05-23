@@ -57,7 +57,7 @@ class GPTProxy:
                     } for path in photo_paths
                 ],
                 role="user",
-                attachments=[{"file_id": file_id, "tools": [{"type": "file_search"}]} for file_id in file_paths],
+                attachments=[{"file_id": self.upload_file(path), "tools": [{"type": "file_search"}]} for path in file_paths],
             )
             return message
 
