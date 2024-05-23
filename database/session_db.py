@@ -1,5 +1,5 @@
-from . import database, cursor
 from loader import gpt
+from . import database, cursor
 
 
 def create_new_session(user_id):
@@ -36,5 +36,16 @@ def get_run_id(user_id):
 
 
 def set_run_id(user_id, run_id):
-    cursor.execute("UPDATE Session SET run_id=? WHERE user_id=? ORDER BY id DESC LIMIT 1", (run_id, user_id,))
+    cursor.execute(
+        """UPDATE Session
+SET run_id = ?
+WHERE id = (
+    SELECT id
+FROM Session
+WHERE user_id = ?
+ORDER BY id DESC
+LIMIT 1
+);""",
+        (run_id, user_id),
+    )
     database.commit()
