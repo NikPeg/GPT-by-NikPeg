@@ -18,15 +18,9 @@ async def create_user_req(user_id, user_name, request_text, file_paths=None):
     await send_big_message(bot, ADMIN_ID, request_text)
     thread_id = get_thread_id(user_id)
     await typing()
-
-    await typing()
-    await bot.send_message(ADMIN_ID, "ADDING MESSAGE")
     await gpt.add_message(thread_id, request_text, file_paths)
     await typing()
-    await bot.send_message(ADMIN_ID, "CREATING NEW RUN")
     run_id = await gpt.create_run(thread_id)
-    await bot.send_message(ADMIN_ID, "NEW RUN " + str(run_id))
-    await bot.send_message(ADMIN_ID, "GETTING ANSWER")
     bot_answer = await gpt.get_answer(thread_id, typing, run_id)
     if not bot_answer:
         return
