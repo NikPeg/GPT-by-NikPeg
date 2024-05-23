@@ -71,14 +71,14 @@ class GPTProxy:
             photo_paths = []
         if file_paths is None:
             file_paths = []
-        for i in range(5):
-            try:
-                message = await create_message()
-                return message
-            except openai.BadRequestError:
-                last_run = await self.last_run(thread_id)
-                if last_run:
-                    await self.cancel_run(thread_id, last_run)
+        # for i in range(5):
+        #     try:
+        message = await create_message()
+        return message
+            # except openai.BadRequestError:
+            #     last_run = await self.last_run(thread_id)
+            #     if last_run:
+            #         await self.cancel_run(thread_id, last_run)
 
     def create_thread(self):
         thread = self.client.beta.threads.create()
