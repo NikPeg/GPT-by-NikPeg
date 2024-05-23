@@ -120,20 +120,18 @@ class GPTProxy:
             return
 
     async def create_run(self, thread_id):
-        try:
-            run = await self.aclient.beta.threads.runs.create(
-                thread_id=thread_id,
-                assistant_id=self.assistant_id,
-            )
-        except openai.BadRequestError:
-            last_run = await self.last_run(thread_id)
-            if last_run:
-                await self.cancel_run(thread_id, last_run)
-            run = await self.aclient.beta.threads.runs.create(
-                thread_id=thread_id,
-                assistant_id=self.assistant_id,
-            )
-        return run.id
+        for i in range(5):
+            try:
+                run = await self.aclient.beta.threads.runs.create(
+                    thread_id=thread_id,
+                    assistant_id=self.assistant_id,
+                )
+                return run.id
+            except openai.BadRequestError:
+                last_run = await self.last_run(thread_id)
+                if last_run:
+                    await self.cancel_run(thread_id, last_run)
+        return None
 
     async def get_answer(self, thread_id, func, run_id):
         while True:
