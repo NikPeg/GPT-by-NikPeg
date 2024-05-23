@@ -1,14 +1,8 @@
-import base64
 import time
-from pathlib import Path
 
 import openai
 from openai import AsyncOpenAI
-from openai.types.beta import FileSearchToolParam
-from openai.types.beta.threads.message_create_params import Attachment
-from tenacity import retry, stop_after_attempt, wait_fixed
 
-from .models import *
 from .prompts import PROMPT
 
 try:
@@ -63,7 +57,7 @@ class GPTProxy:
                     } for path in photo_paths
                 ],
                 role="user",
-                attachments=[Attachment(file_id=file_id, tools=["file_search"]) for file_id in file_paths],
+                attachments=[{"file_id": file_id, "tools": [{"type": "file_search"}]} for file_id in file_paths],
             )
             return message
 
@@ -75,10 +69,10 @@ class GPTProxy:
         #     try:
         message = await create_message()
         return message
-            # except openai.BadRequestError:
-            #     last_run = await self.last_run(thread_id)
-            #     if last_run:
-            #         await self.cancel_run(thread_id, last_run)
+        # except openai.BadRequestError:
+        #     last_run = await self.last_run(thread_id)
+        #     if last_run:
+        #         await self.cancel_run(thread_id, last_run)
 
     def create_thread(self):
         thread = self.client.beta.threads.create()
