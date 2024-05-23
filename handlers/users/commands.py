@@ -206,9 +206,11 @@ async def user_gpt_req_handler(message: types.Message):
     if message.content_type == "photo":
         file = await message.photo[-1].download(destination_dir=files_dir)
         photo_paths.append(file.name)
+        request_text += message.caption
     elif message.content_type == "document":
         file = await message.document.download(destination_dir=files_dir)
         file_paths.append(file.name)
+        request_text += message.caption
 
     try:
         await asyncio.create_task(
