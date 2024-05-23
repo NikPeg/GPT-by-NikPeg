@@ -18,11 +18,7 @@ async def create_user_req(user_id, user_name, request_text, file_paths=None):
     await send_big_message(bot, ADMIN_ID, request_text)
     thread_id = get_thread_id(user_id)
     await typing()
-    last_run = await gpt.last_run(thread_id)
-    await bot.send_message(ADMIN_ID, "LAST RUN " + str(last_run))
-    if last_run:
-        await bot.send_message(ADMIN_ID, "CANCELLING RUN " + str(last_run))
-        await gpt.cancel_run(thread_id, last_run)
+
     await typing()
     await bot.send_message(ADMIN_ID, "ADDING MESSAGE")
     await gpt.add_message(thread_id, request_text, file_paths)

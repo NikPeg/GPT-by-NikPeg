@@ -55,25 +55,50 @@ class GPTProxy:
                 file=Path(path),
                 purpose="assistants",
             ).id)
-        message = await self.aclient.beta.threads.messages.create(
-            thread_id=thread_id,
-            content=[
-                        {
-                            "text": user_question,
-                            "type": "text",
-                        },
-                    ] if user_question else [] + [
-                        {
-                            "type": "image_file",
-                            "image_file": {
-                                "file_id": file_id,
-                                "detail": "low",
-                            }
-                        } for file_id in file_ids
-                    ],
-            role="user",
-            # attachments=[Attachment(file_id=file_id, tools=FileSearchToolParam) for file_id in file_ids],
-        )
+        try:
+            message = await self.aclient.beta.threads.messages.create(
+                thread_id=thread_id,
+                content=[
+                            {
+                                "text": user_question,
+                                "type": "text",
+                            },
+                        ] if user_question else [] + [
+                            {
+                                "type": "image_file",
+                                "image_file": {
+                                    "file_id": file_id,
+                                    "detail": "low",
+                                }
+                            } for file_id in file_ids
+                        ],
+                role="user",
+                # attachments=[Attachment(file_id=file_id, tools=FileSearchToolParam) for file_id in file_ids],
+            )
+        except Exception as e:
+            print(e)
+            last_run = await self.last_run(thread_id)
+            if last_run:
+                await self.cancel_run(thread_id, last_run)
+            message = await self.aclient.beta.threads.messages.create(
+                thread_id=thread_id,
+                content=[
+                    {
+                        "text": user_question,
+                        "type": "text",
+                    },
+                ] if user_question else [] + [
+                    {
+                        "type": "image_file",
+                        "image_file": {
+                            "file_id": file_id,
+                            "detail": "low",
+                        }
+                    } for file_id in file_ids
+                ],
+                role="user",
+                # attachments=[Attachment(file_id=file_id, tools=FileSearchToolParam) for file_id in file_ids],
+            )
         return message
 
     def create_thread(self):
@@ -98,12 +123,21 @@ class GPTProxy:
         )
 
     async def create_run(self, thread_id):
-        run = await self.aclient.beta.threads.runs.create(
-            thread_id=thread_id,
-            assistant_id=self.assistant_id,
-        )
+        try:
+            run = await self.aclient.beta.threads.runs.create(
+                thread_id=thread_id,
+                assistant_id=self.assistant_id,
+            )
+        except Exception as e:
+            print(e)
+            last_run = await self.last_run(thread_id)
+            if last_run:
+                await self.cancel_run(thread_id, last_run)
+            run = await self.aclient.beta.threads.runs.create(
+                thread_id=thread_id,
+                assistant_id=self.assistant_id,
+            )
         return run.id
-        # return None
 
     async def get_answer(self, thread_id, func, run_id):
         while True:
@@ -124,21 +158,3 @@ class GPTProxy:
             else:
                 break
         return "".join(assistant_messages[::-1])
-
-    @retry(wait=wait_fixed(21), stop=stop_after_attempt(5))
-    def ask(self, request, context=None):
-        if context is None:
-            context = []
-        try:
-            completion = self.client.chat.completions.create(
-                model=self.model,
-                messages=[
-                    MessageDTO(Role.SYSTEM, prompts.BIG_KPT).as_dict(),
-                    *[message.as_dict() for message in context],
-                    MessageDTO.from_user(request).as_dict(),
-                ]
-            )
-
-            return completion.choices[0].message.content
-        except Exception as e:
-            raise e
