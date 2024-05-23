@@ -106,7 +106,7 @@ class GPTProxy:
             print("STATUS", run_info.status)
             if run_info.completed_at:
                 break
-            if run_info.cancelled_at:
+            if run_info.status:
                 print("RUN WAS CANCELLED!")
                 return None
             time.sleep(1)
