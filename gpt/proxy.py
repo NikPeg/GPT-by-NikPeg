@@ -23,7 +23,7 @@ class GPTProxy:
 
     def upload_file(self, path, purpose="assistants"):
         result = self.client.files.create(
-            file=open(path),
+            file=open(path, "rb"),
             purpose=purpose,
         )
         return result.id
