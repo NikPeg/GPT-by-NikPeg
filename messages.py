@@ -13,7 +13,7 @@ HELP = "😸ChatGPT by NikPeg — самый базированный бот\. �
        "Кор\. счет 30101810145250000974\n" \
        "ОГРН 323508100225061\n" \
        "Почта peganov\.nik@gmail\.com\n" \
-       "Оферта https://telegra\.ph/Oferta\-na\-okazanie\-informacionnyh\-uslug\-ChatGPT\-by-NikPeg\-\-CHatGPT\-ot\-NikPega\-05\-23"
+       # "Оферта https://telegra\.ph/Oferta\-na\-okazanie\-informacionnyh\-uslug\-ChatGPT\-by-NikPeg\-\-CHatGPT\-ot\-NikPega\-05\-23"
 
 NEW_PROMPT = "<strong>✨Диалог завершен! Надеюсь, тебе понравилось🥺 Введи скорее новый запрос!✨</strong>\n\n" \
              "✍️Пример: <code>{}</code>\n"
