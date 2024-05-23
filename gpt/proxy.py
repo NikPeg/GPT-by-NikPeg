@@ -141,6 +141,9 @@ class GPTProxy:
             if run_info.completed_at:
                 break
             if run_info.status != "in_progress":
+                print()
+                print("FAILED RUN:", run_info)
+                print()
                 return None
             time.sleep(1)
         messages = await self.aclient.beta.threads.messages.list(thread_id)
