@@ -6,7 +6,6 @@ import openai
 from openai import AsyncOpenAI
 from tenacity import retry, stop_after_attempt, wait_fixed
 
-from database.session_db import get_run_id, set_run_id
 from .models import *
 from .prompts import PROMPT
 
@@ -87,24 +86,21 @@ class GPTProxy:
             run_id=run_id,
         )
 
-    async def get_answer(self, thread_id, func, user_id):
-        current_run = get_run_id(user_id)
-        if current_run:
-            await self.cancel_run(thread_id, current_run)
-        await func()
+    async def create_run(self, thread_id):
         run = await self.aclient.beta.threads.runs.create(
             thread_id=thread_id,
             assistant_id=self.assistant_id,
         )
-        set_run_id(user_id, run.id)
+        return run.id
+
+    async def get_answer(self, thread_id, func, run_id):
         while True:
             await func()
-            run_info = await self.aclient.beta.threads.runs.retrieve(thread_id=thread_id, run_id=run.id)
+            run_info = await self.aclient.beta.threads.runs.retrieve(thread_id=thread_id, run_id=run_id)
             if run_info.status == "completed":
                 break
             if run_info.status == "cancelled":
                 return None
-            print("run info", run_info)
             time.sleep(1)
         messages = await self.aclient.beta.threads.messages.list(thread_id)
         assistant_messages = []

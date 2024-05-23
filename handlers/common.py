@@ -2,7 +2,7 @@ from config import ADMIN_ID
 
 import messages
 from database.message_db import add_new_message
-from database.session_db import get_thread_id, get_run_id
+from database.session_db import get_thread_id, get_run_id, set_run_id
 from loader import bot, gpt
 from utils.bot_utils import send_big_message
 
@@ -20,7 +20,14 @@ async def create_user_req(user_id, user_name, request_text, file_paths=None):
     await typing()
     await gpt.add_message(thread_id, request_text, file_paths)
     await typing()
-    bot_answer = await gpt.get_answer(thread_id, typing, user_id)
+    current_run = get_run_id(user_id)
+    if current_run:
+        await gpt.cancel_run(thread_id, current_run)
+    await typing()
+    run = gpt.create_run(thread_id)
+    await typing()
+    set_run_id(user_id, run.id)
+    bot_answer = await gpt.get_answer(thread_id, typing, run.id)
     if not bot_answer:
         return
     await send_big_message(bot, user_id, bot_answer)
