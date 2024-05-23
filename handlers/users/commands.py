@@ -200,16 +200,26 @@ async def user_gpt_req_handler(message: types.Message):
         return
 
     request_text = message.text
-    photos_paths = []
+    photo_paths = []
+    file_paths = []
     files_dir = f"files/"
     if message.content_type == "photo":
         file = await message.photo[-1].download(destination_dir=files_dir)
-        photos_paths.append(file.name)
+        photo_paths.append(file.name)
     elif message.content_type == "document":
-        await message.document.download(destination_dir=files_dir)
+        file = await message.document.download(destination_dir=files_dir)
+        file_paths.append(file.name)
 
     try:
-        await asyncio.create_task(create_user_req(message.chat.id, message.chat.username, request_text, photos_paths or None))
+        await asyncio.create_task(
+            create_user_req(
+                message.chat.id,
+                message.chat.username,
+                request_text,
+                photo_paths or None,
+                file_paths or None,
+            )
+        )
     except openai.BadRequestError as e:
         await bot.send_message(message.chat.id, messages.WAIT)
         await bot.send_message(ADMIN_ID, messages.WAIT + str(e))

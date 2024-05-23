@@ -4,6 +4,8 @@ from pathlib import Path
 
 import openai
 from openai import AsyncOpenAI
+from openai.types.beta import FileSearchToolParam
+from openai.types.beta.threads.message_create_params import Attachment
 from tenacity import retry, stop_after_attempt, wait_fixed
 
 from .models import *
@@ -26,7 +28,6 @@ class GPTProxy:
         self.aclient = AsyncOpenAI(api_key=token)
 
     def upload_file(self, path, purpose="assistants"):
-        print("upload file ", path)
         result = self.client.files.create(
             file=open(path, "rb"),
             purpose=purpose,
@@ -43,17 +44,11 @@ class GPTProxy:
         print("assistant_id:", assistant.id)
         return assistant.id
 
-    def encode_image(self, image_path):
-        with open(image_path, "rb") as image_file:
-            return base64.b64encode(image_file.read()).decode('utf-8')
-
-    async def add_message(self, thread_id, user_question, file_paths=None):
+    async def add_message(self, thread_id, user_question, photo_paths=None, file_paths=None):
+        if photo_paths is None:
+            photo_paths = []
         if file_paths is None:
             file_paths = []
-        print("file paths ", file_paths)
-        file_ids = []
-        for path in file_paths:
-            file_ids.append(self.upload_file(path))
         try:
             message = await self.aclient.beta.threads.messages.create(
                 thread_id=thread_id,
@@ -66,13 +61,13 @@ class GPTProxy:
                             {
                                 "type": "image_file",
                                 "image_file": {
-                                    "file_id": file_id,
+                                    "file_id": self.upload_file(path),
                                     "detail": "low",
                                 }
-                            } for file_id in file_ids
+                            } for path in photo_paths
                         ],
                 role="user",
-                # attachments=[Attachment(file_id=file_id, tools=FileSearchToolParam) for file_id in file_ids],
+                attachments=[Attachment(file_id=file_id, tools=["file_search"]) for file_id in file_paths],
             )
         except openai.BadRequestError:
             last_run = await self.last_run(thread_id)
@@ -89,13 +84,13 @@ class GPTProxy:
                     {
                         "type": "image_file",
                         "image_file": {
-                            "file_id": file_id,
+                            "file_id": self.upload_file(path),
                             "detail": "low",
                         }
-                    } for file_id in file_ids
+                    } for path in photo_paths
                 ],
                 role="user",
-                # attachments=[Attachment(file_id=file_id, tools=FileSearchToolParam) for file_id in file_ids],
+                attachments=[Attachment(file_id=file_id, tools=["file_search"]) for file_id in file_paths],
             )
         return message
 

@@ -9,7 +9,7 @@ from utils.bot_utils import send_big_message
 TYPING_ACTION = "typing"
 
 
-async def create_user_req(user_id, user_name, request_text, file_paths=None):
+async def create_user_req(user_id, user_name, request_text, photo_paths=None, file_paths=None):
     async def typing():
         await bot.send_chat_action(user_id, TYPING_ACTION)
 
@@ -18,7 +18,7 @@ async def create_user_req(user_id, user_name, request_text, file_paths=None):
     await send_big_message(bot, ADMIN_ID, request_text)
     thread_id = get_thread_id(user_id)
     await typing()
-    await gpt.add_message(thread_id, request_text, file_paths)
+    await gpt.add_message(thread_id, request_text, photo_paths, file_paths)
     await typing()
     run_id = await gpt.create_run(thread_id)
     bot_answer = await gpt.get_answer(thread_id, typing, run_id)
