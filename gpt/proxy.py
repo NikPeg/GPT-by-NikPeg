@@ -81,10 +81,12 @@ class GPTProxy:
         return thread.id
 
     async def get_answer(self, thread_id, func):
+        print("gpt answer")
         run = await self.aclient.beta.threads.runs.create(
             thread_id=thread_id,
             assistant_id=self.assistant_id,
         )
+        print("run created")
         while True:
             await func()
             run_info = await self.aclient.beta.threads.runs.retrieve(thread_id=thread_id, run_id=run.id)
