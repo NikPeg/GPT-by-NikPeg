@@ -36,18 +36,16 @@ def get_run_id(user_id):
 
 
 def set_run_id(user_id, run_id):
-    print("!!!!!!!!!set run")
-    print(user_id, run_id)
-#     cursor.execute(
-#         """UPDATE Session
-# SET run = ?
-# WHERE id = (
-#     SELECT id
-# FROM Session
-# WHERE user_id = ?
-# ORDER BY id DESC
-# LIMIT 1
-# );""",
-#         (run_id, user_id),
-#     )
-#     database.commit()
+    cursor.execute(
+        """UPDATE Session
+SET run = ?
+WHERE id = (
+    SELECT id
+FROM Session
+WHERE user_id = ?
+ORDER BY id DESC
+LIMIT 1
+);""",
+        (run_id, user_id),
+    )
+    database.commit()
