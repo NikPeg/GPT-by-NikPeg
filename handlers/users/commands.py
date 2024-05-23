@@ -53,7 +53,12 @@ def price_string(user_id):
 
 @dp.callback_query_handler(text='info', state="*")
 async def info_handler(call: types.CallbackQuery):
-    await call.message.edit_text(HELP.format(price_string(call.message.chat.id)), reply_markup=return_markup(), parse_mode=ParseMode.MARKDOWN_V2)
+    await call.message.edit_text(
+        HELP.format(price_string(call.message.chat.id)),
+        reply_markup=return_markup(),
+        parse_mode=ParseMode.MARKDOWN_V2,
+        disable_web_page_preview=True,
+    )
     await bot.send_message(
         ADMIN_ID,
         messages.BUTTON_PRESSED.format(call.message.chat.id, call.message.chat.username, buttons.ABOUT.text),
@@ -125,7 +130,7 @@ async def paid_handler(message: types.Message):
 
 @dp.message_handler(commands=['help'], state="*")
 async def help_message_handler(message: types.Message):
-    await bot.send_message(message.chat.id, HELP.format(price_string(message.chat.id)), parse_mode=ParseMode.MARKDOWN_V2)
+    await bot.send_message(message.chat.id, HELP.format(price_string(message.chat.id)), parse_mode=ParseMode.MARKDOWN_V2, disable_web_page_preview=True)
     await bot.send_message(message.chat.id, PROMPT.format(random_sentence()))
     await bot.send_message(
         ADMIN_ID,
