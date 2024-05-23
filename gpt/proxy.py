@@ -23,7 +23,7 @@ class GPTProxy:
 
     def upload_file(self, path, purpose="assistants"):
         result = self.client.files.create(
-            file=open(path, "rb"),
+            file=open(path),
             purpose=purpose,
         )
         return result.id
@@ -51,7 +51,7 @@ class GPTProxy:
                     {
                         "type": "image_file",
                         "image_file": {
-                            "file_id": self.upload_file(path),
+                            "file_id": self.upload_file(path, "vision"),
                             "detail": "low",
                         }
                     } for path in photo_paths
