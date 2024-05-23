@@ -92,6 +92,11 @@ class GPTProxy:
             run_info = await self.aclient.beta.threads.runs.retrieve(thread_id=thread_id, run_id=run.id)
             if run_info.completed_at:
                 break
+            print("run info", run_info)
+            await self.aclient.beta.threads.runs.cancel(
+                thread_id=thread_id,
+                run_id=run.id,
+            )
             time.sleep(1)
         messages = await self.aclient.beta.threads.messages.list(thread_id)
         assistant_messages = []
