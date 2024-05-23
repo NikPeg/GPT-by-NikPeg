@@ -34,3 +34,8 @@ def get_run_id(user_id):
         create_new_session(user_id)
         return get_run_id(user_id)
     return run_id[0]
+
+
+def set_run_id(user_id, run_id):
+    cursor.execute("UPDATE Session SET run_id=? WHERE user_id=? ORDER BY id DESC LIMIT 1", (run_id, user_id,))
+    database.commit()
