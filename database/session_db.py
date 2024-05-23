@@ -28,7 +28,7 @@ def get_thread_id(user_id):
 
 
 def get_run_id(user_id):
-    cursor.execute("SELECT run_id FROM Session WHERE user_id=? ORDER BY id DESC LIMIT 1", (user_id,))
+    cursor.execute("SELECT run FROM Session WHERE user_id=? ORDER BY id DESC LIMIT 1", (user_id,))
     run_id = cursor.fetchone()
     if not (run_id and run_id[0]):
         return None
@@ -38,7 +38,7 @@ def get_run_id(user_id):
 def set_run_id(user_id, run_id):
     cursor.execute(
         """UPDATE Session
-SET run_id = ?
+SET run = ?
 WHERE id = (
     SELECT id
 FROM Session
