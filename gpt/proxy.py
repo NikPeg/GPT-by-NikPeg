@@ -80,6 +80,12 @@ class GPTProxy:
         thread = self.client.beta.threads.create()
         return thread.id
 
+    async def last_run(self, thread_id):
+        runs = await self.aclient.beta.threads.runs.list(thread_id, order="desc", limit=1)
+        if runs.data:
+            return runs.data[0].id
+        return None
+
     async def cancel_run(self, thread_id, run_id):
         run_info = await self.aclient.beta.threads.runs.retrieve(thread_id=thread_id, run_id=run_id)
         if run_info.completed_at:
