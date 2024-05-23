@@ -142,8 +142,7 @@ class GPTProxy:
             print("STATUS", run_info.status)
             if run_info.completed_at:
                 break
-            if run_info.cancelled_at:
-                print("RUN WAS CANCELLED!")
+            if run_info.status != "in_progress":
                 return None
             time.sleep(1)
         messages = await self.aclient.beta.threads.messages.list(thread_id)
