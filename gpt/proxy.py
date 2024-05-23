@@ -120,7 +120,7 @@ class GPTProxy:
             print("STATUS", run_info.status)
             if run_info.completed_at:
                 break
-            if run_info.status != "in_progress":
+            if run_info.status not in {"in_progress", "queued"}:
                 return run_info.last_error.message
             time.sleep(1)
         messages = await self.aclient.beta.threads.messages.list(thread_id)
