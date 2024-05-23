@@ -26,6 +26,7 @@ class GPTProxy:
         self.aclient = AsyncOpenAI(api_key=token)
 
     def upload_file(self, path, purpose="assistants"):
+        print("upload file ", path)
         result = self.client.files.create(
             file=open(path, "rb"),
             purpose=purpose,
@@ -49,12 +50,10 @@ class GPTProxy:
     async def add_message(self, thread_id, user_question, file_paths=None):
         if file_paths is None:
             file_paths = []
+        print("file paths ", file_paths)
         file_ids = []
         for path in file_paths:
-            file_ids.append(self.client.files.create(
-                file=Path("test.jpg"),
-                purpose="assistants",
-            ).id)
+            file_ids.append(self.upload_file(path))
         try:
             message = await self.aclient.beta.threads.messages.create(
                 thread_id=thread_id,
