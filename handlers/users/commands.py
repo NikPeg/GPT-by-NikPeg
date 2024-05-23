@@ -204,9 +204,10 @@ async def user_gpt_req_handler(message: types.Message):
     if message.photo:
         request_text = message.caption
         for photo in message.photo:
-            photo_path = f"files/{photo.file_id}.jpg"
-            await photo.download(destination=photo_path)
-            file_paths.append(photo_path)
+            path = f"files/"
+            file = await photo.download(destination_dir=path)
+            print("FILE ", file)
+            # file_paths.append(photo_path)
 
     try:
         await asyncio.create_task(create_user_req(message.chat.id, message.chat.username, request_text, file_paths or None))

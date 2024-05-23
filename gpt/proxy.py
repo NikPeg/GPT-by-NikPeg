@@ -141,7 +141,7 @@ class GPTProxy:
             if run_info.completed_at:
                 break
             if run_info.status != "in_progress":
-                return f"{run_info.last_error.code} {run_info.last_error.message}"
+                return run_info.last_error.message
             time.sleep(1)
         messages = await self.aclient.beta.threads.messages.list(thread_id)
         assistant_messages = []
