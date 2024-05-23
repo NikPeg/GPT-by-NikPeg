@@ -21,6 +21,8 @@ async def create_user_req(user_id, user_name, request_text, file_paths=None):
     await gpt.add_message(thread_id, request_text, file_paths)
     await typing()
     bot_answer = await gpt.get_answer(thread_id, typing)
+    if not bot_answer:
+        return
     await send_big_message(bot, user_id, bot_answer)
     await bot.send_message(ADMIN_ID, messages.BOT_ANSWERED.format(user_id, user_name))
     await send_big_message(bot, ADMIN_ID, bot_answer)

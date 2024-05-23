@@ -90,8 +90,10 @@ class GPTProxy:
         while True:
             await func()
             run_info = await self.aclient.beta.threads.runs.retrieve(thread_id=thread_id, run_id=run.id)
-            if run_info.completed_at:
+            if run_info.status == "completed":
                 break
+            if run_info.status == "cancelled":
+                return None
             print("run info", run_info)
             await self.aclient.beta.threads.runs.cancel(
                 thread_id=thread_id,
