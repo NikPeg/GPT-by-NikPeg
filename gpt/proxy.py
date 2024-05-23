@@ -80,6 +80,12 @@ class GPTProxy:
         thread = self.client.beta.threads.create()
         return thread.id
 
+    async def cancel_run(self, thread_id, run_id):
+        await self.aclient.beta.threads.runs.cancel(
+            thread_id=thread_id,
+            run_id=run_id,
+        )
+
     async def get_answer(self, thread_id, func):
         print("gpt answer")
         run = await self.aclient.beta.threads.runs.create(
@@ -95,10 +101,6 @@ class GPTProxy:
             if run_info.status == "cancelled":
                 return None
             print("run info", run_info)
-            # await self.aclient.beta.threads.runs.cancel(
-            #     thread_id=thread_id,
-            #     run_id=run.id,
-            # )
             time.sleep(1)
         messages = await self.aclient.beta.threads.messages.list(thread_id)
         assistant_messages = []

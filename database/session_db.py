@@ -25,3 +25,12 @@ def get_thread_id(user_id):
         create_new_session(user_id)
         return get_thread_id(user_id)
     return thread_id[0]
+
+
+def get_run_id(user_id):
+    cursor.execute("SELECT run_id FROM Session WHERE user_id=? ORDER BY id DESC LIMIT 1", (user_id,))
+    run_id = cursor.fetchone()
+    if not (run_id and run_id[0]):
+        create_new_session(user_id)
+        return get_run_id(user_id)
+    return run_id[0]

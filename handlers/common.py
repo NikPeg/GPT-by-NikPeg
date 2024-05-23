@@ -2,7 +2,7 @@ from config import ADMIN_ID
 
 import messages
 from database.message_db import add_new_message
-from database.session_db import get_thread_id
+from database.session_db import get_thread_id, get_run_id
 from loader import bot, gpt
 from utils.bot_utils import send_big_message
 
@@ -19,6 +19,10 @@ async def create_user_req(user_id, user_name, request_text, file_paths=None):
     thread_id = get_thread_id(user_id)
     await typing()
     await gpt.add_message(thread_id, request_text, file_paths)
+    await typing()
+    current_run = get_run_id(user_id)
+    if current_run:
+        gpt.cancel_run(current_run)
     await typing()
     bot_answer = await gpt.get_answer(thread_id, typing)
     if not bot_answer:
