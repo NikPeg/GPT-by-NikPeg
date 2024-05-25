@@ -65,14 +65,8 @@ class GPTProxy:
             photo_paths = []
         if file_paths is None:
             file_paths = []
-        # for i in range(5):
-        #     try:
         message = await create_message()
         return message
-        # except openai.BadRequestError:
-        #     last_run = await self.last_run(thread_id)
-        #     if last_run:
-        #         await self.cancel_run(thread_id, last_run)
 
     def create_thread(self):
         thread = self.client.beta.threads.create()
@@ -120,6 +114,8 @@ class GPTProxy:
         messages = await self.aclient.beta.threads.messages.list(thread_id)
         assistant_messages = []
         for message_data in messages.data:
+            print("!!!MESSAGE DATA")
+            print(message_data)
             if message_data.role == "assistant":
                 assistant_messages.append(message_data.content[0].text.value)
             else:
