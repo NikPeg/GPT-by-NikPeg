@@ -17,7 +17,7 @@ class GPTProxy:
     def __init__(self, token, model="gpt-3.5-turbo", bot=None):
         self.client = openai.OpenAI(api_key=token)
         self.model = model
-        self.assistant_id = ASSISTANT_ID or self.create_assistant("NikPeg bot", PROMPT, True)
+        self.assistant_id = ASSISTANT_ID or self.create_assistant("NikPeg bot", PROMPT)
         self.bot = bot
         self.aclient = AsyncOpenAI(api_key=token)
 
@@ -28,12 +28,12 @@ class GPTProxy:
         )
         return result.id
 
-    def create_assistant(self, name, instructions="", code_interpreter=False):
+    def create_assistant(self, name, instructions=""):
         assistant = self.client.beta.assistants.create(
             model=self.model,
             name=name,
             instructions=instructions,
-            tools=[{"type": "code_interpreter"}] if code_interpreter else [],
+            tools=[{"type": "code_interpreter"}, {"type": "file_search"}],
         )
         print("assistant_id:", assistant.id)
         return assistant.id
@@ -58,7 +58,7 @@ class GPTProxy:
                 } for path in photo_paths
             ] or " ",
             role="user",
-            attachments=[{"file_id": self.upload_file(path, "batch"), "tools": [{"type": "file_search"}]} for path in file_paths],
+            attachments=[{"file_id": self.upload_file(path), "tools": [{"type": "file_search"}]} for path in file_paths],
         )
         return message
 
