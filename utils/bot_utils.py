@@ -31,8 +31,6 @@ async def send_big_message(bot, user_id, text):
         while j < len(text_part):
             if j + 3 <= len(text_part) and text_part[j:j + 3] == "```":
                 big_code_mode = not big_code_mode
-                print("BIG CODE MODE", big_code_mode)
-                print("j", j)
                 j += 3
                 continue
             if text_part[j] == "`":
