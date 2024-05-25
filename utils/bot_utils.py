@@ -14,7 +14,7 @@ async def send_big_message(bot, user_id, text):
     symbols_stack = []
     code_mode = False
     big_code_mode = False
-    text = escape_markdown_symbols(text)
+    text = text
     for i in range(0, len(text), MAX_MESSAGE_LENGTH):
         text_part = ""
         if big_code_mode:
@@ -24,11 +24,13 @@ async def send_big_message(bot, user_id, text):
         else:
             for symbol in symbols_stack:
                 text_part += symbol
-        text_part += text[i:i + MAX_MESSAGE_LENGTH]
+        text_part += escape_markdown_symbols(text[i:i + MAX_MESSAGE_LENGTH])
         j = 0
         while j < len(text_part):
             if j + 3 <= len(text_part) and text_part[j:j + 3] == "```":
                 big_code_mode = not big_code_mode
+                print("BIG CODE MODE", big_code_mode)
+                print("j", j)
                 j += 3
                 continue
             if text_part[j] == "`":
