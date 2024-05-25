@@ -39,33 +39,25 @@ class GPTProxy:
         return assistant.id
 
     async def add_message(self, thread_id, user_question="", photo_paths=None, file_paths=None):
-        async def create_message():
-            message = await self.aclient.beta.threads.messages.create(
-                thread_id=thread_id,
-                content=[
-                    {
-                        "text": user_question,
-                        "type": "text",
-                    },
-                ] if user_question else [] + [
-                    {
-                        "type": "image_file",
-                        "image_file": {
-                            "file_id": self.upload_file(path, "vision"),
-                            "detail": "low",
-                        }
-                    } for path in photo_paths
-                ] or " ",
-                role="user",
-                attachments=[{"file_id": self.upload_file(path), "tools": [{"type": "file_search"}]} for path in file_paths],
-            )
-            return message
-
-        if photo_paths is None:
-            photo_paths = []
-        if file_paths is None:
-            file_paths = []
-        message = await create_message()
+        message = await self.aclient.beta.threads.messages.create(
+            thread_id=thread_id,
+            content=[
+                {
+                    "text": user_question,
+                    "type": "text",
+                },
+            ] if user_question else [] + [
+                {
+                    "type": "image_file",
+                    "image_file": {
+                        "file_id": self.upload_file(path, "vision"),
+                        "detail": "low",
+                    }
+                } for path in photo_paths
+            ] or " ",
+            role="user",
+            attachments=[{"file_id": self.upload_file(path, "batch"), "tools": [{"type": "file_search"}]} for path in file_paths],
+        )
         return message
 
     def create_thread(self):
