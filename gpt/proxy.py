@@ -38,7 +38,9 @@ class GPTProxy:
         print("assistant_id:", assistant.id)
         return assistant.id
 
-    async def add_message(self, thread_id, user_question="", photo_paths=None, file_paths=None):
+    async def add_message(self, thread_id, user_question=" ", photo_paths=None, file_paths=None):
+        photo_paths = [] if not photo_paths else photo_paths
+        file_paths = [] if not file_paths else file_paths
         message = await self.aclient.beta.threads.messages.create(
             thread_id=thread_id,
             content=[
@@ -46,7 +48,7 @@ class GPTProxy:
                     "text": user_question,
                     "type": "text",
                 },
-            ] if user_question else [] + [
+            ] + [
                 {
                     "type": "image_file",
                     "image_file": {
