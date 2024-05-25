@@ -14,6 +14,8 @@ async def send_big_message(bot, user_id, text):
     symbols_stack = []
     code_mode = False
     big_code_mode = False
+    print("SEND BIG MESSAGE")
+    print(text)
     text = escape_markdown_symbols(text)
     for i in range(0, len(text), MAX_MESSAGE_LENGTH):
         text_part = ""
@@ -56,6 +58,8 @@ async def send_big_message(bot, user_id, text):
             for symbol in symbols_stack[::-1]:
                 text_part += symbol
         try:
+            print("SENDING")
+            print(text_part)
             await bot.send_message(user_id, text_part, parse_mode=ParseMode.MARKDOWN_V2)
             break
         except Exception as e:
