@@ -105,7 +105,6 @@ class GPTProxy:
         while True:
             await func()
             run_info = await self.aclient.beta.threads.runs.retrieve(thread_id=thread_id, run_id=run_id)
-            print("STATUS", run_info.status)
             if run_info.completed_at:
                 break
             if run_info.status not in {"in_progress", "queued"}:
@@ -114,7 +113,6 @@ class GPTProxy:
         messages = await self.aclient.beta.threads.messages.list(thread_id)
         assistant_messages = []
         for message_data in messages.data:
-            print("!!!MESSAGE DATA")
             print(message_data)
             if message_data.role == "assistant":
                 assistant_messages.append(message_data.content[0].text.value)
