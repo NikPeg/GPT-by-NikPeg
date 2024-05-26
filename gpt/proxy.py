@@ -1,5 +1,5 @@
 import time
-
+import os
 import openai
 from openai import AsyncOpenAI
 
@@ -26,6 +26,7 @@ class GPTProxy:
             file=open(path, "rb"),
             purpose=purpose,
         )
+        os.remove(path)
         return result.id
 
     def create_assistant(self, name, instructions=""):
