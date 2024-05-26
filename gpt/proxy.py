@@ -42,25 +42,33 @@ class GPTProxy:
     async def add_message(self, thread_id, user_question=" ", photo_paths=None, file_paths=None):
         photo_paths = [] if not photo_paths else photo_paths
         file_paths = [] if not file_paths else file_paths
-        message = await self.aclient.beta.threads.messages.create(
-            thread_id=thread_id,
-            content=[
-                {
-                    "text": user_question,
-                    "type": "text",
-                },
-            ] + [
-                {
-                    "type": "image_file",
-                    "image_file": {
-                        "file_id": self.upload_file(path, "vision"),
-                        "detail": "low",
-                    }
-                } for path in photo_paths
-            ] or " ",
-            role="user",
-            attachments=[{"file_id": self.upload_file(path), "tools": [{"type": "file_search"}]} for path in file_paths],
-        )
+
+        async def _create_message():
+            return await self.aclient.beta.threads.messages.create(
+                thread_id=thread_id,
+                content=[
+                    {
+                        "text": user_question,
+                        "type": "text",
+                    },
+                ] + [
+                    {
+                        "type": "image_file",
+                        "image_file": {
+                            "file_id": self.upload_file(path, "vision"),
+                            "detail": "low",
+                        }
+                    } for path in photo_paths
+                ] or " ",
+                role="user",
+                attachments=[{"file_id": self.upload_file(path), "tools": [{"type": "file_search"}]} for path in file_paths],
+            )
+        try:
+            message = await _create_message()
+        except openai.BadRequestError:
+            run = self.last_run(thread_id)
+            await self.cancel_run(thread_id, run)
+            message = await _create_message()
         return message
 
     def create_thread(self):
