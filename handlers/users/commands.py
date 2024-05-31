@@ -72,8 +72,10 @@ SUBSCRIPTION_CHECKS_COUNT = 300
 
 @dp.callback_query_handler(text='payment', state="*")
 async def payment_handler(call: types.CallbackQuery):
+    sale = get_sale(call.message.chat.id)
+    price = int(config.PRICE * (100 - sale) / 100)
     link = client.create_order(
-        config.PRICE,
+        price,
         Currency.RUB,
         messages.PAYMENT_DESCRIPTION,
         account_id=call.message.chat.id,
