@@ -40,7 +40,7 @@ FEEDBACK_PERIOD = 24 * 60 * 60
 
 async def start_feed_back():
     while True:
-        # await asyncio.sleep(FEEDBACK_PERIOD)
+        await asyncio.sleep(FEEDBACK_PERIOD)
         all_users = get_all_feed_back_users()
         for user in all_users:
             try:
@@ -50,7 +50,6 @@ async def start_feed_back():
             except Exception as e:
                 await bot.send_message(ADMIN_ID, text=e)
                 continue
-        await asyncio.sleep(FEEDBACK_PERIOD)
 
 
 async def check_subscriptions():
