@@ -86,9 +86,9 @@ async def send_big_message(bot, user_id, text):
                 print(e)
 
 
-def price_string(user_id):
+def price_string(user_id, start="~", end="~"):
     sale = get_sale(user_id)
     price = int(PRICE * (100 - sale) / 100)
     if sale:
-        price = f"~ {PRICE} ~ {price}"
+        price = f"{start} {PRICE} {end} {price}"
     return price

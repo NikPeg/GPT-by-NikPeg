@@ -183,7 +183,7 @@ async def user_gpt_req_handler(message: types.Message):
 
         await bot.send_message(
             message.chat.id,
-            messages.EXPIRED_PAYMENT.format(price_string(message.chat.id)),
+            messages.EXPIRED_PAYMENT.format(price_string(message.chat.id, "<del>", "</del>")),
             reply_markup=payment_markup(),
         )
         await bot.send_message(
