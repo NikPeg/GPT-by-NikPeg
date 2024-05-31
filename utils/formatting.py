@@ -20,7 +20,7 @@ def escape_headers(s, open_symbol="*", close_symbol="*"):
 
 def escape_markdown_symbols(s):
     s = escape_headers(s)
-    characters_to_escape = set("!@#$%^&+-={}\\./|<>")
+    characters_to_escape = set("!@#$%^&+-={}\\./|<>()[]")
     escaped_string = ''.join(['\\' + char if char in characters_to_escape else char for char in s])
     return escaped_string
 
