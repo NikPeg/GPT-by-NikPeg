@@ -22,6 +22,7 @@ from handlers.common import create_user_req
 from keyboards.keyboards import start_markup, return_markup, payment_markup
 from loader import dp, bot, client
 from messages import HELP, START, PROMPT, NEW_PROMPT
+from utils.bot_utils import send_big_message
 
 
 class UserState(StatesGroup):
@@ -185,6 +186,9 @@ async def user_gpt_req_handler(message: types.Message):
             return await unsubscribe_message_handler(message)
 
     if not check_subscribed(message.chat.id):
+        await bot.send_message(ADMIN_ID, messages.MESSAGE_SENT.format(message.chat.id, message.chat.username))
+        await send_big_message(bot, ADMIN_ID, message.text)
+
         await bot.send_message(
             message.chat.id,
             messages.EXPIRED_PAYMENT.format(config.PRICE),
