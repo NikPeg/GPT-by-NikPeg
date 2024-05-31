@@ -60,7 +60,6 @@ async def check_subscriptions():
             await bot.send_message(ADMIN_ID, f"{user_id} @{username} {subscribed}")
             try:
                 for sub in client.list_subscriptions(user_id):
-                    await bot.send_message(ADMIN_ID, text=str(sub.status))
                     if sub.status == payments.SubscriptionStatus.ACTIVE.value and not subscribed:
                         await bot.send_message(
                             ADMIN_ID,
