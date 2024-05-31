@@ -15,7 +15,7 @@ async def on_startup(dispatcher):
     await bot.send_message(config.ADMIN_ID, messages.BOT_STARTED.format(config.INSTANCE_NAME))
     await set_default_commands(dispatcher)
     asyncio.create_task(start_feed_back())
-    # asyncio.create_task(check_subscriptions())
+    asyncio.create_task(check_subscriptions())
 
 
 if __name__ == '__main__':
