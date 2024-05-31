@@ -1,8 +1,9 @@
 from aiogram.types import ParseMode
+
+from database.user_db import get_sale
 from utils.formatting import markdown_to_html, escape_symbols, escape_markdown_symbols
 
-from config import ADMIN_ID
-
+from config import ADMIN_ID, PRICE
 
 MAX_MESSAGE_LENGTH = 4096 - 10
 SPECIAL_SYMBOLS = ["*", "_", "~"]
@@ -83,3 +84,11 @@ async def send_big_message(bot, user_id, text):
             except Exception as e:
                 await bot.send_message(ADMIN_ID, e)
                 print(e)
+
+
+def price_string(user_id):
+    sale = get_sale(user_id)
+    price = int(PRICE * (100 - sale) / 100)
+    if sale:
+        price = f"~ {PRICE} ~ {price}"
+    return price

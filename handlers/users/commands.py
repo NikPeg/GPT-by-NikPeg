@@ -22,7 +22,7 @@ from handlers.common import create_user_req
 from keyboards.keyboards import start_markup, return_markup, payment_markup
 from loader import dp, bot, client
 from messages import HELP, START, PROMPT, NEW_PROMPT
-from utils.bot_utils import send_big_message
+from utils.bot_utils import send_big_message, price_string
 
 
 class UserState(StatesGroup):
@@ -42,14 +42,6 @@ async def start_command_handler(message: types.Message):
         messages.BUTTON_PRESSED.format(message.chat.id, message.chat.username, message.text),
     )
     await UserState.gpt_request.set()
-
-
-def price_string(user_id):
-    sale = get_sale(user_id)
-    price = int(config.PRICE * (100 - sale) / 100)
-    if sale:
-        price = f"~ {config.PRICE} ~ {price}"
-    return price
 
 
 @dp.callback_query_handler(text='info', state="*")
@@ -191,7 +183,7 @@ async def user_gpt_req_handler(message: types.Message):
 
         await bot.send_message(
             message.chat.id,
-            messages.EXPIRED_PAYMENT.format(config.PRICE),
+            messages.EXPIRED_PAYMENT.format(price_string(message.chat.id)),
             reply_markup=payment_markup(),
         )
         await bot.send_message(
