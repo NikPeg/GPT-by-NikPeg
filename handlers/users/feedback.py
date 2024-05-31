@@ -25,9 +25,11 @@ async def get_feedback_handler(call: types.CallbackQuery):
 async def feedback_handler(message: types.Message, state: FSMContext):
     await state.finish()
     add_new_feedback(message.chat.id, message.text)
-    await bot.send_message(
+    await bot.send_message(ADMIN_ID, messages.FEEDBACK_SENT.format(message.chat.id, message.chat.username))
+    await bot.forward_message(
         ADMIN_ID,
-        messages.FEEDBACK_SENT.format(message.chat.id, message.chat.username, message.text),
+        message.chat.id,
+        message.message_id,
     )
     await bot.send_message(message.chat.id, messages.FEEDBACK_THANK)
     delete_user_from_feedback(message.chat.id)
