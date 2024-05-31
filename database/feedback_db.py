@@ -27,7 +27,7 @@ def get_all_feed_back_users():
     cursor.execute(
         """SELECT uf.user_id 
 FROM UserFeedback uf 
-JOIN User u ON uf.user_id = u.user_id 
+JOIN User u ON uf.user_id = u.id 
 WHERE u.register <= datetime('now', '-1 minute')
 """
     )
