@@ -24,7 +24,13 @@ def delete_user_from_feedback(user_id):
 
 
 def get_all_feed_back_users():
-    cursor.execute("SELECT uf.user_id FROM UserFeedback uf JOIN User u ON uf.user_id = u.user_id WHERE u.started <= NOW() - INTERVAL 1 MINUTE")
+    cursor.execute(
+        """SELECT uf.user_id 
+FROM UserFeedback uf 
+JOIN User u ON uf.user_id = u.user_id 
+WHERE u.started <= datetime('now', '-1 minute')
+"""
+    )
     all_users = cursor.fetchall()
     return all_users
 
