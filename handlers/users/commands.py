@@ -178,7 +178,7 @@ async def user_gpt_req_handler(message: types.Message):
     if message.chat.id == ADMIN_ID:
         if message.text == '/unsubscribe':
             return await unsubscribe_message_handler(message)
-
+    add_new_user(message.chat.id, message.chat.username)
     if not check_subscribed(message.chat.id):
         await bot.send_message(ADMIN_ID, messages.MESSAGE_SENT.format(message.chat.id, message.chat.username))
         await send_big_message(bot, ADMIN_ID, message.text)

@@ -8,7 +8,10 @@ DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 def check_subscribed(user_id):
     cursor.execute("SELECT register FROM User WHERE id=?", (user_id,))
-    register = datetime.datetime.strptime(cursor.fetchone()[0], DATE_FORMAT)
+    result = cursor.fetchone()
+    if not result:
+        return False
+    register = datetime.datetime.strptime(result[0], DATE_FORMAT)
     if register + datetime.timedelta(days=2) >= datetime.datetime.now():
         return True
     cursor.execute("SELECT subscribed FROM User WHERE id=?", (user_id,))
