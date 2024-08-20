@@ -10,4 +10,7 @@ def add_sentence(sentence):
 
 def random_sentence():
     cursor.execute("SELECT sentence_text FROM PromptSentence ORDER BY RANDOM() LIMIT 1;")
-    return cursor.fetchone()[0]
+    res = cursor.fetchone()
+    if not res:
+        return ""
+    return res[0]
